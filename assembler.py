@@ -1,15 +1,15 @@
+import sys
 
-
-
+ 
 
 variable_dict={}
-register_dict={'R0':'0000000000000000','R1':'0000000000000001','R2':'0000000000000010','R3':'0000000000000011','R4':'0000000000000100','R5':'0000000000000101','R6':'0000000000000110','FLAGS':'0000000000000111'}
+register_dict={'R0':'000','R1':'001','R2':'010','R3':'011','R4':'100','R5':'101','R6':'110','FLAGS':'111'}
 
 
 
+req_file=sys.argv[1]
 
-
-input_file=open('input1.txt','r')
+input_file=open(req_file,'r')
 input_assembly_codes=input_file.read().splitlines()
 final_assembly_codes=[]
 instruction_counter=len(input_assembly_codes)
