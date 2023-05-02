@@ -20,13 +20,22 @@ req_file='input1.txt'
 
 input_file=open(req_file,'r')
 input_assembly_codes=input_file.read().splitlines()
+
+#Parsing for variable allocation
 final_assembly_codes=[]
 instruction_counter=len(input_assembly_codes)
 var_count=0
+var_memory = instruction_counter + 1
+var_dict = {}
 for i in range (len(input_assembly_codes)):
-    if 'var' in input_assembly_codes[i].split():
+    command = input_assembly_codes[i].split()
+    if 'var' in command:
         var_count+=1
-        input_assembly_codes.append(input_assembly_codes[i])
+        temp = str(bin(var_memory)[2:])
+        temp = "0"*(7 - len(temp)) + temp
+        var_dict[command[1]] = temp
+        var_memory += 1
+        #input_assembly_codes.append(input_assembly_codes[i])
 
 
 label_dict = {}
