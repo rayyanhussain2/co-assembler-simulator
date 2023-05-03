@@ -1,6 +1,6 @@
 import sys
 
-opDict = {'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov_imm': ['00010', 'B'], 'mov_reg': ['00011', 'C'],
+op_dict = {'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov_imm': ['00010', 'B'], 'mov_reg': ['00011', 'C'],
           'ld': ['00100', 'D'], 'st': ['00101', 'D'], 'mul': ['00110', 'A'], 'div': ['00111', 'C'],
           'rs': ['01000', 'B'], 'ls': ['01001', 'B'], 'xor': ['01010', 'A'], 'or': ['01011', 'A'],
           'and': ['01100', 'A'], 'not': ['01101', 'C'], 'cmp': ['01110', 'C'], 'jmp': ['01111', 'E'],
@@ -14,7 +14,7 @@ register_dict={'R0':'000','R1':'001','R2':'010','R3':'011','R4':'100','R5':'101'
 
 
 
-#req_file=sys.argv[1]
+req_file=sys.argv[1]
 req_file='input1.txt'
 
 
@@ -48,3 +48,16 @@ for i in range(instruction_counter):
         temp = input_assembly_codes[i].split()
         temp = " ".join(temp[1:])
         input_assembly_codes[i] = temp
+
+#reading through the list of assembly codes and converting to machine
+instruction_size=16
+machine_code_list=[]
+for i in range(len(input_assembly_codes)):
+    print(input_assembly_codes[i].split()[0])
+for i in range(len(input_assembly_codes)):
+    if input_assembly_codes[i].split()[0] in op_dict:
+        if op_dict[input_assembly_codes[i].split()[0]][1]=='A':
+            unused_bits=instruction_size-(3*len(register_dict['R0'])+len(op_dict[input_assembly_codes[i].split()[0]][0]))
+            beginning_bits=op_dict[input_assembly_codes[i].split()[0]][0]+unused_bits*'0'
+            register_bits=register_dict[input_assembly_codes[i].split()[1]]+register_dict[input_assembly_codes[i].split()[2]]+register_dict[input_assembly_codes[i].split()[3]]
+            machine_code_list.append(beginning_bits+register_bits)
