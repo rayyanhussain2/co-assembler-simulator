@@ -43,7 +43,7 @@ label_dict = {}
 for i in range(instruction_counter):
     curr_line = input_assembly_codes[i].split()
     if(curr_line[0][-1] == ':'):
-        temp = str(bin(i)[2:])
+        temp = str(bin(i+1)[2:])
         temp = "0"*(7 - len(temp)) + temp
         label_dict[curr_line[0][:-1]] = str(temp)
         temp = input_assembly_codes[i].split()
