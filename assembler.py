@@ -79,8 +79,24 @@ for i in range(len(input_assembly_codes)):
         elif op_dict[curr_line[0]][1] == 'C':
             unused_bits = "0" * (5)
             machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + var_dict[curr_line[2]])
-    
+
+        #if op code is of type E
+        elif op_dict[curr_line[0]][1] == 'E':
+            unused_bits = "0" * (4)
+            op = op_dict[curr_line[0]][0]
+
+            if curr_line[1] in var_dict:
+                mem_ = var_dict[curr_line[1]]
+            elif curr_line[1] in label_dict:
+                mem_ = label_dict[curr_line[1]]
+            
+            s = op + unused_bits + mem_
+            machine_code_list.append(s)
+        #if op code is of type F
+        elif op_dict[curr_line[0]][1] == 'F':
+            break
+
           
 
 #For Debug purpose, shall delete later
-print(machine_code_list) 
+print(machine_code_list)
