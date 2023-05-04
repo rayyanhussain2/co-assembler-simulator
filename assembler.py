@@ -76,4 +76,4 @@ for i in range(len(input_assembly_codes)):
             machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + var_dict[curr_line[2]])
 
 #For Debug purpose, shall delete later
-print(machine_code_list)
+print(machine_code_list) 
