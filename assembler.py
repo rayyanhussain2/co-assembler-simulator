@@ -19,7 +19,9 @@ req_file='input1.txt'
 
 
 input_file=open(req_file,'r')
+#these are inputted by user
 input_assembly_codes=input_file.read().splitlines()
+
 
 #Parsing for variable allocation
 final_assembly_codes=[]
@@ -41,6 +43,7 @@ for i in range (len(input_assembly_codes)):
 label_dict = {}
 #Parsing for label allocation
 for i in range(instruction_counter):
+          #these are line-wise commands
     curr_line = input_assembly_codes[i].split()
     if(curr_line[0][-1] == ':'):
         temp = str(bin(i+1)[2:])
@@ -76,12 +79,15 @@ for i in range(len(input_assembly_codes)):
             unused_bits = "0" * (1)
             machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + var_dict[curr_line[2]])
         #if opcode is of type C
-        elif op_dict[curr_line[0]][1] == 'C':
+        elif curr_line[0] == 'mov' and curr_2[2] in register_dict.keys():
                     unused_bits = "0" * (5)
-                    machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])
-
-          elif curr_line[0]=='mov':
-                              machine_code_list.append(op_dict['mov_reg'][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])
+                    machine_code_list.append(op_dict['mov_reg'][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])
+                    
+          elif op_dict[curr_line[0]][1] == 'C' :
+            unused_bits = "0" * (5)
+            machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]]) 
+           
+                              
                         
 
         #if op code is of type E
