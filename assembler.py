@@ -52,7 +52,6 @@ for i in range(instruction_counter):
         temp = input_assembly_codes[i].split()
         temp = " ".join(temp[1:])
         input_assembly_codes[i] = temp
-print(label_dict)
 
 #reading through the list of assembly codes and converting to machine
 instruction_size=16
@@ -83,8 +82,8 @@ for i in range(len(input_assembly_codes)):
        
         #if opcode is of type C
         elif curr_line[0] == 'mov' and curr_line[2] in register_dict.keys():
-                    unused_bits = "0" * (5)
-                    machine_code_list.append(op_dict['mov_reg'][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])   
+            unused_bits = "0" * (5)
+            machine_code_list.append(op_dict['mov_reg'][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])   
         elif op_dict[curr_line[0]][1] == 'C' :
             unused_bits = "0" * (5)
             machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])
@@ -93,11 +92,7 @@ for i in range(len(input_assembly_codes)):
         elif op_dict[curr_line[0]][1] == 'E':
             unused_bits = "0" * (4)
             op = op_dict[curr_line[0]][0]
-
-            if curr_line[1] in var_dict:
-                mem_ = var_dict[curr_line[1]]
-            elif curr_line[1] in label_dict:
-                mem_ = label_dict[curr_line[1]]           
+            mem_ = label_dict[curr_line[1]]           
             s = op + unused_bits + mem_
             machine_code_list.append(s)
        
