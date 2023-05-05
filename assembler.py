@@ -68,28 +68,27 @@ for i in range(len(input_assembly_codes)):
             beginning_bits=op_dict[curr_line[0]][0]+unused_bits*'0'
             register_bits=register_dict[curr_line[1]]+register_dict[curr_line[2]]+register_dict[curr_line[3]]
             machine_code_list.append(beginning_bits+register_bits)
+
         #If opcode is of type B
         elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
             unused_bits = "0" * (1)
             immidiate_value = str(bin(int(curr_line[2][1:])))
             immidiate_value = "0" * (7-len(immidiate_value[2:])) + immidiate_value[2:]
             machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + immidiate_value)
+       
         #If opcode is of type D
         elif op_dict[curr_line[0]][1] == 'D':
             unused_bits = "0" * (1)
             machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + var_dict[curr_line[2]])
+       
         #if opcode is of type C
-        elif curr_line[0] == 'mov' and curr_2[2] in register_dict.keys():
+        elif curr_line[0] == 'mov' and curr_line[2] in register_dict.keys():
                     unused_bits = "0" * (5)
-                    machine_code_list.append(op_dict['mov_reg'][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])
-                    
-          elif op_dict[curr_line[0]][1] == 'C' :
+                    machine_code_list.append(op_dict['mov_reg'][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])   
+        elif op_dict[curr_line[0]][1] == 'C' :
             unused_bits = "0" * (5)
-            machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]]) 
-           
-                              
-                        
-
+            machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])
+        
         #if op code is of type E
         elif op_dict[curr_line[0]][1] == 'E':
             unused_bits = "0" * (4)
@@ -98,15 +97,14 @@ for i in range(len(input_assembly_codes)):
             if curr_line[1] in var_dict:
                 mem_ = var_dict[curr_line[1]]
             elif curr_line[1] in label_dict:
-                mem_ = label_dict[curr_line[1]]
-            
+                mem_ = label_dict[curr_line[1]]           
             s = op + unused_bits + mem_
             machine_code_list.append(s)
+       
         #if op code is of type F
         elif op_dict[curr_line[0]][1] == 'F':
             break
 
-          
 
 #For Debug purpose, shall delete later
 print(machine_code_list)
