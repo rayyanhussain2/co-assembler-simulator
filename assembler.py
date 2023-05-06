@@ -98,7 +98,8 @@ for i in range(len(input_assembly_codes)):
        
         #if op code is of type F
         elif op_dict[curr_line[0]][1] == 'F':
-            break
+            s = "1001100000000000"
+            machine_code_list.append(s)
 
 
 #For Debug purpose, shall delete later
