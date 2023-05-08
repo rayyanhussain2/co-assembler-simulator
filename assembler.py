@@ -58,9 +58,11 @@ machine_code_list=[]
 #creating a 2d list to store the indices of the instructions that have errors in them.
 #each list within is of the format [index, message, error_type]
 error_indices = []
-
+hlt_flag=False
 #reading through the list of assembly codes and converting to machine
 for i in range(len(input_assembly_codes)):
+
+    
     #Handling the case where the opcodes are valid, else would be the error handling
     #For now, we store the machine code in a list.
     curr_line = input_assembly_codes[i].split() 
@@ -93,7 +95,7 @@ for i in range(len(input_assembly_codes)):
 
                 if(int(curr_line[2][1:])>= (2**7)):
                     error_message="illegal immediate value(overflowing 7 bits)"
-                    error_indices.append([i,error_message,'e'])
+                    error_indices.append([i,error_message,'i'])
                 else:
 
                     immidiate_value = str(bin(int(curr_line[2][1:])))
@@ -165,7 +167,14 @@ for i in range(len(input_assembly_codes)):
     #Handling case where there are typos in instruction name
     else:
         error_indices.append([i, "Invalid operation name: " + curr_line[0] , 'a_opcode'])
-
+    
+    if i==len(input_assembly_codes)-1:
+        if input_assembly_codes[i]!='hlt':
+            error_indices.append([i,"Last instruction not hlt",'i'])
+    if input_assembly_codes[i]=='hlt':
+        hlt_flag=True
+    if hlt_flag==False:
+        error_indices.append["no hlt present",'h']
     
 
 if(len(error_indices) == 0):
@@ -177,6 +186,7 @@ else:
 
 
 #For Debug purpose, shall delete later
+print(input_assembly_codes)
 print(machine_code_list)
 print()
 print(variable_dict.keys())
