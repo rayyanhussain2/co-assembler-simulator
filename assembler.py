@@ -93,7 +93,7 @@ for i in range(len(input_assembly_codes)):
 
                 if(int(curr_line[2][1:])>= (2**7)):
                     error_message="illegal immediate value(overflowing 7 bits)"
-                    error_indices.append([i,error_message,'i'])
+                    error_indices.append([i,error_message,'e'])
                 else:
 
                     immidiate_value = str(bin(int(curr_line[2][1:])))
