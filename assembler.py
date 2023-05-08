@@ -183,13 +183,13 @@ if hlt_flag==False:
     
 
 if(len(error_indices) == 0):
-          pass
+      
           outputfile= open('output.txt','w')
           outputfile.writelines(machine_code_list)
           
 else:
           pass
-          outputfile.writelines(machine_code_list)
+  
           
     
 
