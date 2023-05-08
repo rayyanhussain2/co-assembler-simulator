@@ -89,18 +89,23 @@ for i in range(len(input_assembly_codes)):
 
         #If opcode is of type B
         elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
+            imm_flag=True
+            if(int(curr_line[2][1:])>= (2**7)):
+                error_message="illegal immediate value(overflowing 7 bits)"
+                error_indices.append([i,error_message,'e'])
+                imm_flag=False
             #If the registers are valid
             if(curr_line[1] in register_dict.keys()):
-                unused_bits = "0" * (1)
+                if imm_flag==True:
+                    unused_bits = "0" * (1)
 
-                if(int(curr_line[2][1:])>= (2**7)):
-                    error_message="illegal immediate value(overflowing 7 bits)"
-                    error_indices.append([i,error_message,'i'])
-                else:
+                    
 
                     immidiate_value = str(bin(int(curr_line[2][1:])))
                     immidiate_value = "0" * (7-len(immidiate_value[2:])) + immidiate_value[2:]
                     machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + immidiate_value)
+                else:
+                    pass
             else:
                 error_indices.append([i, curr_line[1], 'a_reg'])
        
@@ -173,8 +178,8 @@ for i in range(len(input_assembly_codes)):
             error_indices.append([i,"Last instruction not hlt",'i'])
     if input_assembly_codes[i]=='hlt':
         hlt_flag=True
-    if hlt_flag==False:
-        error_indices.append["no hlt present",'h']
+if hlt_flag==False:
+    error_indices.append["no hlt present",'h']
     
 
 if(len(error_indices) == 0):
