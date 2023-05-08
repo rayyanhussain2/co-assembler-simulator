@@ -199,3 +199,6 @@ print()
 print(register_dict.keys())
 print()
 print(error_indices)
+
+outputfile= open('output.txt','w')
+outputfile.writelines(machine_code_list)
