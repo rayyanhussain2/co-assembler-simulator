@@ -9,7 +9,6 @@ op_dict = {'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov': ['00010', 'B'], 
 inst_list = ['add', 'sub', 'mov', 'ld', 'st', 'mul', 'div', 'rs', 'ls', 'xor', 'or', 'and', 'not', 'cmp',
              'jmp', 'jlt', 'jgt', 'je', 'hlt']
 
-variable_dict={}
 register_dict={'R0':'000','R1':'001','R2':'010','R3':'011','R4':'100','R5':'101','R6':'110','FLAGS':'111'}
 
 
@@ -28,14 +27,14 @@ final_assembly_codes=[]
 instruction_counter=len(input_assembly_codes)
 var_count=0
 var_memory = instruction_counter + 1
-var_dict = {}
+variable_dict={}
 for i in range (len(input_assembly_codes)):
     command = input_assembly_codes[i].split()
     if 'var' in command:
         var_count += 1
         temp = str(bin(var_memory)[2:])
         temp = "0"*(7 - len(temp)) + temp
-        var_dict[command[1]] = temp
+        variable_dict[command[1]] = temp
         var_memory += 1
         #input_assembly_codes.append(input_assembly_codes[i])
 
@@ -102,7 +101,7 @@ for i in range(len(input_assembly_codes)):
             #If the registers are valid and variables are valid
             if(curr_line[1] in register_dict.keys() and curr_line[2] in variable_dict.keys()):
                 unused_bits = "0" * (1)
-                machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + var_dict[curr_line[2]])
+                machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + variable_dict[curr_line[2]])
             else:
                 #if the error lies in register
                 if(curr_line[1] not in register_dict.keys()):
