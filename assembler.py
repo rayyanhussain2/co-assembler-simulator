@@ -90,9 +90,15 @@ for i in range(len(input_assembly_codes)):
             #If the registers are valid
             if(curr_line[1] in register_dict.keys()):
                 unused_bits = "0" * (1)
-                immidiate_value = str(bin(int(curr_line[2][1:])))
-                immidiate_value = "0" * (7-len(immidiate_value[2:])) + immidiate_value[2:]
-                machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + immidiate_value)
+
+                if(int(curr_line[2][1:])>= (2**7)):
+                    error_message="illegal immediate value(overflowing 7 bits)"
+                    error_indices.append([i,error_message,'i'])
+                else:
+
+                    immidiate_value = str(bin(int(curr_line[2][1:])))
+                    immidiate_value = "0" * (7-len(immidiate_value[2:])) + immidiate_value[2:]
+                    machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + immidiate_value)
             else:
                 error_indices.append([i, curr_line[1], 'a_reg'])
        
@@ -159,6 +165,8 @@ for i in range(len(input_assembly_codes)):
     #Handling case where there are typos in instruction name
     else:
         error_indices.append([i, "Invalid operation name: " + curr_line[0] , 'a_opcode'])
+
+    
 
 if(len(error_indices) == 0):
     pass
