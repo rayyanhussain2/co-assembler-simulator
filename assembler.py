@@ -183,11 +183,17 @@ if hlt_flag==False:
     
 
 if(len(error_indices) == 0):
-    pass
-    #code for writing the content of machine_code_list into text file - Prabal. Delete the pass statement
+          pass
+          outputfile= open('output.txt','w')
+          outputfile.writelines(machine_code_list)
+          
 else:
-    pass
-    #code to print error
+          pass
+          outputfile.writelines(machine_code_list)
+          
+    
+
+outputfile.close()
 
 
 #For Debug purpose, shall delete later
@@ -200,5 +206,4 @@ print(register_dict.keys())
 print()
 print(error_indices)
 
-outputfile= open('output.txt','w')
-outputfile.writelines(machine_code_list)
+
