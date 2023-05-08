@@ -179,21 +179,20 @@ for i in range(len(input_assembly_codes)):
     if input_assembly_codes[i]=='hlt':
         hlt_flag=True
 if hlt_flag==False:
-    error_indices.append["no hlt present",'h']
+    error_indices.append(["no hlt present",'h'])
     
 
 if(len(error_indices) == 0):
       
-          outputfile= open('output.txt','w')
-          outputfile.writelines(machine_code_list)
-          
+          outputfile = open('output.txt','w')
+          outputfile.writelines(line + '\n' for line in machine_code_list)
+          outputfile.close()
 else:
           pass
   
           
     
 
-outputfile.close()
 
 
 #For Debug purpose, shall delete later
