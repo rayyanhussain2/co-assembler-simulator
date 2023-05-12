@@ -59,13 +59,23 @@ machine_code_list=[]
 #each list within is of the format [index, message, error_type]
 error_indices = []
 hlt_flag=False
+used_variables = list()
+
 #reading through the list of assembly codes and converting to machine
 for i in range(len(input_assembly_codes)):
-
-    
     #Handling the case where the opcodes are valid, else would be the error handling
     #For now, we store the machine code in a list.
-    curr_line = input_assembly_codes[i].split() 
+    curr_line = input_assembly_codes[i].split()
+    if len(curr_line) == 3:
+        if curr_line[2] == "FLAGS" and curr_line[0] != "mov":
+            error_indices.append([i,"ILLEGAL USE OF FLAGS REGISTER", "d"])
+            continue
+
+    elif len(curr_line) == 2:
+        if curr_line[1] == "FLAGS":
+            error_indices.append([i,"ILLEGAL USE OF FLAGS REGISTER", "d"])
+            continue
+    
     if curr_line[0] in op_dict:
         #If opcode is of type A
         if op_dict[curr_line[0]][1]=='A':
@@ -119,9 +129,15 @@ for i in range(len(input_assembly_codes)):
                 #if the error lies in register
                 if(curr_line[1] not in register_dict.keys()):
                     error_indices.append([i, curr_line[1], 'a_reg'])
+            
+                #Label used in place of variable
+                if(curr_line[2] in list(label_dict.keys())):
+                    error_indices.append([i, f"Label {curr_line[2]} misused here", 'f'])
                 #if the error lies in variable
-                if(curr_line[2] not in variable_dict.keys()):
+                elif(curr_line[2] not in variable_dict.keys()):
                     error_indices.append([i, curr_line[2], 'b'])
+                    #storing all the variables that are used but not declared
+                    used_variables.append(curr_line[2])
        
         #if opcode is of type C
         elif curr_line[0] == 'mov' and curr_line[2] in register_dict.keys():
@@ -156,6 +172,7 @@ for i in range(len(input_assembly_codes)):
         
         #if op code is of type E
         elif op_dict[curr_line[0]][1] == 'E':
+
             if(curr_line[1] in label_dict.keys()):
                 unused_bits = "0" * (4)
                 op = op_dict[curr_line[0]][0]
@@ -163,7 +180,10 @@ for i in range(len(input_assembly_codes)):
                 s = op + unused_bits + mem_
                 machine_code_list.append(s)
             else:
-                error_indices.append([i, curr_line[1], 'c'])
+                if (curr_line[1] in list(variable_dict.keys())):
+                    error_indices.append([i, f"Misuse of variable {curr_line[1]} here", 'f'])
+                else:
+                    error_indices.append([i, curr_line[1], 'c'])
        
         #if op code is of type F
         elif op_dict[curr_line[0]][1] == 'F':
@@ -180,6 +200,15 @@ for i in range(len(input_assembly_codes)):
         hlt_flag=True
 if hlt_flag==False:
     error_indices.append(["no hlt present",'h'])
+
+used_variables = list(set(used_variables))
+flag_var = True
+for i in range(len(used_variables)):
+    if(input_assembly_codes[i].split()[0] != 'var'):
+        flag_var = False
+
+if not flag_var:
+    error_indices.append(["-","Variables not declared in the beginning","g"])    
     
 
 if(len(error_indices) == 0):
@@ -204,5 +233,3 @@ print()
 print(register_dict.keys())
 print()
 print(error_indices)
-
-
