@@ -30,7 +30,7 @@ error_indices = []
 
 #input
 #req_file=sys.argv[1]
-req_file='HARDcases/input38.txt'
+req_file='HARDcases/input36.txt'
 input_file=open(req_file,'r')
 #these are inputted by user
 input_assembly_codes=input_file.read().splitlines()
@@ -144,7 +144,7 @@ else:
             #If opcode is of type B
             elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
                 imm_flag=True
-                if not((eval(curr_line[2][1:]) == int) and (int(curr_line[2][1:]) >= 0) and (int(curr_line[2][1:]) <= (127))):
+                if not((isinstance(eval(curr_line[2][1:]), int) == True) and (int(curr_line[2][1:]) >= 0) and (int(curr_line[2][1:]) <= (127))):
                     error_indices.append([str(i), "illegal immediate value", 'e'])
                     imm_flag=False
                 
