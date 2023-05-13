@@ -18,20 +18,29 @@ final_assembly_codes=[]
 machine_code_list=[]
 
 error_indices = []
+#------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 #input
 #req_file=sys.argv[1]
-req_file='input1.txt'
+req_file='HARDcases/input38.txt'
 input_file=open(req_file,'r')
 #these are inputted by user
 input_assembly_codes=input_file.read().splitlines()
 input_assembly_codes = [i for i in input_assembly_codes if i != ""]
 
-
-
 #Parsing for variable allocation
-instruction_counter=len([i for i in input_assembly_codes if i[0:3] != 'var'])
-var_memory = instruction_counter
+raw_length = len(input_assembly_codes)
+instructions_length = len([i for i in input_assembly_codes if i[0:3] != 'var'])
+var_memory = instructions_length
+var_count = 0
 for i in range (len(input_assembly_codes)):
     command = input_assembly_codes[i].split()
     if 'var' in command:
@@ -39,13 +48,13 @@ for i in range (len(input_assembly_codes)):
         temp = "0" * (7 - len(temp)) + temp
         variable_dict[command[1]] = temp
         var_memory += 1
+        var_count += 1
 
 #Parsing for label allocation
-for i in range(instruction_counter):
-          #these are line-wise commands
+for i in range(raw_length):
     curr_line = input_assembly_codes[i].split()
     if(curr_line[0][-1] == ':'):
-        temp = str(bin(i - len(variable_dict.keys()))[2:])
+        temp = str(bin(i - var_count)[2:])
         temp = "0"*(7 - len(temp)) + temp
         label_dict[curr_line[0][:-1]] = str(temp)
         temp = input_assembly_codes[i].split()
@@ -60,12 +69,31 @@ hlt_flag=False
 used_variables = list()
 hlt_counter = 0
 
+#------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 #Handling instruction length errors
 if(len(input_assembly_codes) > 128):
     error_indices.append([128,'Instruction length exceeds memory size',''])
 
-#reading through the list of assembly codes and converting to machine and handling errors
+#parsing the instructions
 else:
+    input_assembly_codes_temp = input_assembly_codes[:]
+    input_assembly_codes = list()
+    #removing all the var lines in the code
+    for i in range(len(input_assembly_codes_temp)):
+        if(input_assembly_codes_temp[i].split()[0] != 'var'):
+            input_assembly_codes.append(input_assembly_codes_temp[i])
+
+    #reading through the list of assembly codes and converting to machine and handling errors
     for i in range(len(input_assembly_codes)):
         #Handling the case where the opcodes are valid, else would be the error handling
         #For now, we store the machine code in a list.
@@ -226,7 +254,13 @@ else:
             flag_var = False
     if not flag_var:
         error_indices.append(["-","Variables not declared in the beginning","g"])    
-    
+#------------------------------------------------------------------------------
+
+
+
+
+
+
 #printing 
 if(len(error_indices) == 0):
       
@@ -235,15 +269,17 @@ if(len(error_indices) == 0):
           outputfile.close()
 else:
     pass
-            
-  
-          
-    
+#------------------------------------------------------------------------------
+
 
 
 
 #For Debug purpose, shall delete later
+print()
 print(input_assembly_codes)
+print()
+print(input_assembly_codes_temp)
+print()
 print(machine_code_list)
 print()
 print(variable_dict)
