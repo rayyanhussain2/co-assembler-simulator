@@ -27,20 +27,18 @@ input_file=open(req_file,'r')
 input_assembly_codes=input_file.read().splitlines()
 input_assembly_codes = [i for i in input_assembly_codes if i != ""]
 
+
+
 #Parsing for variable allocation
-instruction_counter=len(input_assembly_codes)
-var_count=0
-var_memory = instruction_counter + 1
+instruction_counter=len([i for i in input_assembly_codes if i[0:3] != 'var'])
+var_memory = instruction_counter
 for i in range (len(input_assembly_codes)):
     command = input_assembly_codes[i].split()
     if 'var' in command:
-        var_count += 1
         temp = str(bin(var_memory)[2:])
-        temp = "0"*(7 - len(temp)) + temp
+        temp = "0" * (7 - len(temp)) + temp
         variable_dict[command[1]] = temp
         var_memory += 1
-        #input_assembly_codes.append(input_assembly_codes[i])
-
 
 #Parsing for label allocation
 for i in range(instruction_counter):
