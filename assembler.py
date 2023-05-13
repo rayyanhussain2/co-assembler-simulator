@@ -14,7 +14,7 @@ register_dict={'R0':'000','R1':'001','R2':'010','R3':'011','R4':'100','R5':'101'
 
 
 #req_file=sys.argv[1]
-req_file='input51.txt'
+req_file='input15.txt'
 
 
 input_file=open(req_file,'r')
@@ -84,29 +84,33 @@ for i in range(len(input_assembly_codes)):
     
     if curr_line[0] in op_dict:
         #If opcode is of type A
+
         if op_dict[curr_line[0]][1]=='A':
-            #If the registers are valid
-            if(curr_line[1] in register_dict.keys() and curr_line[2] in register_dict.keys() and curr_line[3] in register_dict.keys()):
-                unused_bits=instruction_size-(3*len(register_dict['R0'])+len(op_dict[curr_line[0]][0]))
-                beginning_bits=op_dict[curr_line[0]][0]+unused_bits*'0'
-                register_bits=register_dict[curr_line[1]]+register_dict[curr_line[2]]+register_dict[curr_line[3]]
-                machine_code_list.append(beginning_bits+register_bits)
+            if len(curr_line)==4:
+                #If the registers are valid
+                if(curr_line[1] in register_dict.keys() and curr_line[2] in register_dict.keys() and curr_line[3] in register_dict.keys()):
+                    unused_bits=instruction_size-(3*len(register_dict['R0'])+len(op_dict[curr_line[0]][0]))
+                    beginning_bits=op_dict[curr_line[0]][0]+unused_bits*'0'
+                    register_bits=register_dict[curr_line[1]]+register_dict[curr_line[2]]+register_dict[curr_line[3]]
+                    machine_code_list.append(beginning_bits+register_bits)
+                else:
+                    #creating a string var to store the error message which contains all the registers that are faulty.
+                    #This message will be later parsed and printed out as required.
+                    error_message = ""
+                    if(curr_line[1] not in register_dict.keys()):
+                        error_message += curr_line[1] + " "
+                    if(curr_line[2] not in register_dict.keys()):
+                        error_message += curr_line[2] + " "
+                    if(curr_line[3] not in register_dict.keys()):
+                        error_message += curr_line[3] + " "
+                    error_indices.append([str(i), error_message, 'a_reg'])
             else:
-                #creating a string var to store the error message which contains all the registers that are faulty.
-                #This message will be later parsed and printed out as required.
-                error_message = ""
-                if(curr_line[1] not in register_dict.keys()):
-                    error_message += curr_line[1] + " "
-                if(curr_line[2] not in register_dict.keys()):
-                    error_message += curr_line[2] + " "
-                if(curr_line[3] not in register_dict.keys()):
-                    error_message += curr_line[3] + " "
-                error_indices.append([str(i), error_message, 'a_reg'])
+                error_indices.append([str(i),"general syntax error"])
 
         #If opcode is of type B
         elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
             imm_flag=True
-            if(int(curr_line[2][1:])<0 or int(curr_line[2][1:])>= (2**7)):
+            if(eval(curr_line[2][1:])!=int or int(curr_line[2][1:])<0 or int(curr_line[2][1:])>= (2**7)):
                 error_message="illegal immediate value"
                 error_indices.append([str(i),error_message,'e'])
                 imm_flag=False
