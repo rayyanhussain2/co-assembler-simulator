@@ -20,7 +20,7 @@ req_file='input15.txt'
 input_file=open(req_file,'r')
 #these are inputted by user
 input_assembly_codes=input_file.read().splitlines()
-
+input_assembly_codes = [i for i in input_assembly_codes if i != ""]
 
 #Parsing for variable allocation
 final_assembly_codes=[]
@@ -60,7 +60,7 @@ machine_code_list=[]
 error_indices = []
 hlt_flag=False
 used_variables = list()
-
+hlt_counter = 0
 #reading through the list of assembly codes and converting to machine
 for i in range(len(input_assembly_codes)):
     #Handling the case where the opcodes are valid, else would be the error handling
@@ -204,13 +204,15 @@ for i in range(len(input_assembly_codes)):
         error_indices.append([str(i), "Invalid operation name: " + curr_line[0] , 'a_opcode'])
     
     
-    if input_assembly_codes[i]=='hlt':
-        hlt_flag=True
-    if i==len(input_assembly_codes)-1:
-        if input_assembly_codes[i]!='hlt':
-            error_indices.append([str(i),"Last instruction not hlt",'i'])
-if hlt_flag==False:
-    error_indices.append(["no hlt present",'h'])
+        if input_assembly_codes[i]=='hlt':
+            hlt_flag=True
+            hlt_counter += 1
+
+if (hlt_counter <= 1 and input_assembly_codes[-1] != "hlt"):
+    error_indices.append([str(i),"Last instruction not hlt",'i'])
+
+elif hlt_counter > 1:
+    error_indices.append([str(i),"Multiple instances of hlt found",'i'])
 
 
 used_variables = list(set(used_variables))
