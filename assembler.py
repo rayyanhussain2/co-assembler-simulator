@@ -98,6 +98,8 @@ else:
         #Handling the case where the opcodes are valid, else would be the error handling
         #For now, we store the machine code in a list.
         curr_line = input_assembly_codes[i].split()
+
+        #Handling Flags error
         if len(curr_line) == 3:
             if curr_line[2] == "FLAGS" and curr_line[0] != "mov":
                 error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
@@ -113,10 +115,10 @@ else:
                 error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
                 continue
 
-        
+        #Handling case where there are typos in instruction name
         if curr_line[0] in op_dict:
+            
             #If opcode is of type A
-
             if op_dict[curr_line[0]][1]=='A':
                 if len(curr_line)==4:
                     #If the registers are valid
@@ -142,17 +144,14 @@ else:
             #If opcode is of type B
             elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
                 imm_flag=True
-                if(eval(curr_line[2][1:])!=int or int(curr_line[2][1:])<0 or int(curr_line[2][1:])>= (2**7)):
-                    error_message="illegal immediate value"
-                    error_indices.append([str(i),error_message,'e'])
+                if not((eval(curr_line[2][1:]) == int) and (int(curr_line[2][1:]) >= 0) and (int(curr_line[2][1:]) <= (127))):
+                    error_indices.append([str(i), "illegal immediate value", 'e'])
                     imm_flag=False
-                #If the registers are valid
+                
+                #If the registers are valid and the immediate value is correct
                 if(curr_line[1] in register_dict.keys()):
                     if imm_flag==True:
                         unused_bits = "0" * (1)
-
-                        
-
                         immidiate_value = str(bin(int(curr_line[2][1:])))
                         immidiate_value = "0" * (7-len(immidiate_value[2:])) + immidiate_value[2:]
                         machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + immidiate_value)
@@ -231,14 +230,14 @@ else:
             elif op_dict[curr_line[0]][1] == 'F':
                 s = "1001100000000000"
                 machine_code_list.append(s)
-        #Handling case where there are typos in instruction name
+        
         else:
             error_indices.append([str(i), "Invalid operation name: " + curr_line[0] , 'a_opcode'])
         
-        
-            if input_assembly_codes[i]=='hlt':
-                hlt_flag=True
-                hlt_counter += 1
+        #Counting number of hlt instances
+        if input_assembly_codes[i]=='hlt':
+            hlt_flag=True
+            hlt_counter += 1
 
     #Handling hlt errors
     if (hlt_counter <= 1 and input_assembly_codes[-1] != "hlt"):
