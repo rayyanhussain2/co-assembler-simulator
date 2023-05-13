@@ -4,7 +4,7 @@ op_dict = {'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov': ['00010', 'B'], 
           'ld': ['00100', 'D'], 'st': ['00101', 'D'], 'mul': ['00110', 'A'], 'div': ['00111', 'C'],
           'rs': ['01000', 'B'], 'ls': ['01001', 'B'], 'xor': ['01010', 'A'], 'or': ['01011', 'A'],
           'and': ['01100', 'A'], 'not': ['01101', 'C'], 'cmp': ['01110', 'C'], 'jmp': ['01111', 'E'],
-          'jlt': ['10000', 'E'], 'jgt': ['10001', 'E'], 'je': ['10010', 'E'], 'hlt': ['10011', 'F'], 'var': ['', '']}
+          'jlt': ['11100', 'E'], 'jgt': ['11101', 'E'], 'je': ['11111', 'E'], 'hlt': ['11010', 'F'], 'var': ['', '']}
 
 inst_list = ['add', 'sub', 'mov', 'ld', 'st', 'mul', 'div', 'rs', 'ls', 'xor', 'or', 'and', 'not', 'cmp',
              'jmp', 'jlt', 'jgt', 'je', 'hlt']
@@ -14,7 +14,7 @@ register_dict={'R0':'000','R1':'001','R2':'010','R3':'011','R4':'100','R5':'101'
 
 
 #req_file=sys.argv[1]
-req_file='input1.txt'
+req_file='input51.txt'
 
 
 input_file=open(req_file,'r')
@@ -68,13 +68,19 @@ for i in range(len(input_assembly_codes)):
     curr_line = input_assembly_codes[i].split()
     if len(curr_line) == 3:
         if curr_line[2] == "FLAGS" and curr_line[0] != "mov":
-            error_indices.append([i,"ILLEGAL USE OF FLAGS REGISTER", "d"])
+            error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
             continue
 
     elif len(curr_line) == 2:
         if curr_line[1] == "FLAGS":
-            error_indices.append([i,"ILLEGAL USE OF FLAGS REGISTER", "d"])
+            error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
             continue
+
+    elif len(curr_line) == 4:
+        if "FLAGS" in curr_line:
+            error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
+            continue
+
     
     if curr_line[0] in op_dict:
         #If opcode is of type A
@@ -95,14 +101,14 @@ for i in range(len(input_assembly_codes)):
                     error_message += curr_line[2] + " "
                 if(curr_line[3] not in register_dict.keys()):
                     error_message += curr_line[3] + " "
-                error_indices.append([i, error_message, 'a_reg'])
+                error_indices.append([str(i), error_message, 'a_reg'])
 
         #If opcode is of type B
         elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
             imm_flag=True
-            if(int(curr_line[2][1:])>= (2**7)):
-                error_message="illegal immediate value(overflowing 7 bits)"
-                error_indices.append([i,error_message,'e'])
+            if(int(curr_line[2][1:])<0 or int(curr_line[2][1:])>= (2**7)):
+                error_message="illegal immediate value"
+                error_indices.append([str(i),error_message,'e'])
                 imm_flag=False
             #If the registers are valid
             if(curr_line[1] in register_dict.keys()):
@@ -117,7 +123,7 @@ for i in range(len(input_assembly_codes)):
                 else:
                     pass
             else:
-                error_indices.append([i, curr_line[1], 'a_reg'])
+                error_indices.append([str(i), curr_line[1], 'a_reg'])
        
         #If opcode is of type D
         elif op_dict[curr_line[0]][1] == 'D':
@@ -128,14 +134,14 @@ for i in range(len(input_assembly_codes)):
             else:
                 #if the error lies in register
                 if(curr_line[1] not in register_dict.keys()):
-                    error_indices.append([i, curr_line[1], 'a_reg'])
+                    error_indices.append([str(i), curr_line[1], 'a_reg'])
             
                 #Label used in place of variable
                 if(curr_line[2] in list(label_dict.keys())):
-                    error_indices.append([i, f"Label {curr_line[2]} misused here", 'f'])
+                    error_indices.append([str(i), f"Label {curr_line[2]} misused here", 'f'])
                 #if the error lies in variable
                 elif(curr_line[2] not in variable_dict.keys()):
-                    error_indices.append([i, curr_line[2], 'b'])
+                    error_indices.append([str(i), curr_line[2], 'b'])
                     #storing all the variables that are used but not declared
                     used_variables.append(curr_line[2])
        
@@ -153,7 +159,7 @@ for i in range(len(input_assembly_codes)):
                     error_message += curr_line[1] + " "
                 if(curr_line[2] not in register_dict.keys()):
                     error_message += curr_line[2] + " "
-                error_indices.append([i, error_message, 'a_reg'])
+                error_indices.append([str(i), error_message, 'a_reg'])
 
         elif op_dict[curr_line[0]][1] == 'C' :
             #If the registers are valid
@@ -168,7 +174,7 @@ for i in range(len(input_assembly_codes)):
                     error_message += curr_line[1] + " "
                 if(curr_line[2] not in register_dict.keys()):
                     error_message += curr_line[2] + " "
-                error_indices.append([i, error_message, 'a_reg'])
+                error_indices.append([str(i), error_message, 'a_reg'])
         
         #if op code is of type E
         elif op_dict[curr_line[0]][1] == 'E':
@@ -181,9 +187,9 @@ for i in range(len(input_assembly_codes)):
                 machine_code_list.append(s)
             else:
                 if (curr_line[1] in list(variable_dict.keys())):
-                    error_indices.append([i, f"Misuse of variable {curr_line[1]} here", 'f'])
+                    error_indices.append([str(i), f"Misuse of variable {curr_line[1]} here", 'f'])
                 else:
-                    error_indices.append([i, curr_line[1], 'c'])
+                    error_indices.append([str(i), curr_line[1], 'c'])
        
         #if op code is of type F
         elif op_dict[curr_line[0]][1] == 'F':
@@ -191,15 +197,17 @@ for i in range(len(input_assembly_codes)):
             machine_code_list.append(s)
     #Handling case where there are typos in instruction name
     else:
-        error_indices.append([i, "Invalid operation name: " + curr_line[0] , 'a_opcode'])
+        error_indices.append([str(i), "Invalid operation name: " + curr_line[0] , 'a_opcode'])
     
-    if i==len(input_assembly_codes)-1:
-        if input_assembly_codes[i]!='hlt':
-            error_indices.append([i,"Last instruction not hlt",'i'])
+    
     if input_assembly_codes[i]=='hlt':
         hlt_flag=True
+    if i==len(input_assembly_codes)-1:
+        if input_assembly_codes[i]!='hlt':
+            error_indices.append([str(i),"Last instruction not hlt",'i'])
 if hlt_flag==False:
     error_indices.append(["no hlt present",'h'])
+
 
 used_variables = list(set(used_variables))
 flag_var = True
@@ -217,7 +225,15 @@ if(len(error_indices) == 0):
           outputfile.writelines(line + '\n' for line in machine_code_list)
           outputfile.close()
 else:
-          pass
+        fh2=open('error_bin.txt','w')
+        err_list=[]
+        for i in range(len(error_indices)):
+            output_str=""
+            for j in range(len(error_indices[i])):
+                output_str+=(error_indices[i][j]+" ")
+            err_list.append(output_str)
+        fh2.writelines(line + '\n' for line in err_list)
+            
   
           
     
