@@ -1,6 +1,6 @@
 # Python ISA Assembler
 
-This repository contains a Python-based assembler for the **CSE 112 Assignment** instruction set architecture (ISA). 
+This repository contains a Python-based assembler for the instruction set architecture (ISA) that is created specifically for the Computer Organization course (CSE 112) offered in the Winter Semester of 2023 at Indraprastha Institute of Information Technology Delhi. 
 
 ## Requirements
 
