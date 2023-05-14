@@ -58,30 +58,34 @@ The ISA has 6 encoding types of instructions. The assembler supports the followi
 
 A
 - `add` - Performs reg1 = reg2 + reg3. If the computation overflows, then the overflow flag is set and 0 is written in reg1
-- `sub`
-- `mul`
-- `xor`
-- `or`
-- `and`
+- `sub` - Performs reg1 = reg2- reg3. In case reg3 > reg2, 0 is written to reg1 and overflow flag is set.
+- `mul` - Performs reg1 = reg2 x reg3. If the computation overflows, then the overflow flag is set and 0 is written in reg1.
+- `xor` - Performs bitwise XOR of reg2 and reg3. Stores the result in reg1.
+- `or` - Performs bitwise OR of reg2 and reg3. Stores the result in reg1.
+- `and` - Performs bitwise AND of reg2 and reg3. Stores the result in reg1.
 
 B
 - `mov`
 - `rs`
 - `ls`
+
 C
 - `mov`
 - `div`
 - `not`
 - `cmp`
+
 D
 - `ld`
 - `st`
 - `cmp`
+
 E
 - `jmp`
 - `jlt`
 - `jgt`
 - `je`
+
 F
 - `hlt`
 
