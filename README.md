@@ -20,38 +20,38 @@ The assembler will then generate a binary file containing the assembled machine 
 
 The ISA has 6 encoding types of instructions. The assembler supports the following instructions:
 
-A
+Type A
 - `add`
     Performs reg1 = reg2 + reg3. If the computation overflows, then the overflow flag is set and 0 is written in reg1
-- `sub` - Performs reg1 = reg2- reg3. In case reg3 > reg2, 0 is written to reg1 and overflow flag is set.
+- `sub` Performs reg1 = reg2- reg3. In case reg3 > reg2, 0 is written to reg1 and overflow flag is set.
 - `mul` - Performs reg1 = reg2 x reg3. If the computation overflows, then the overflow flag is set and 0 is written in reg1.
 - `xor` - Performs bitwise XOR of reg2 and reg3. Stores the result in reg1.
 - `or` - Performs bitwise OR of reg2 and reg3. Stores the result in reg1.
 - `and` - Performs bitwise AND of reg2 and reg3. Stores the result in reg1.
 
-B
+Type B
 - `mov`
 - `rs`
 - `ls`
 
-C
+Type C
 - `mov`
 - `div`
 - `not`
 - `cmp`
 
-D
+Type D
 - `ld`
 - `st`
 - `cmp`
 
-E
+Type E
 - `jmp`
 - `jlt`
 - `jgt`
 - `je`
 
-F
+Type F
 - `hlt`
 
 ## Assembly Syntax
