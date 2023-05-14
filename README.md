@@ -42,28 +42,55 @@ Type A
 
 Type B
 - `mov`
+
+    Performs reg1 = $Imm where Imm is a 7 bit value.
 - `rs`
+
+    Right shifts reg1 by $Imm, where $Imm is a 7 bit value.
 - `ls`
+
+    Left shifts reg1 by $Imm, where $Imm is a 7 bit value.
 
 Type C
 - `mov`
+
+    Move content of reg2 into reg1.
 - `div`
+
+    Performs reg3/reg4. Stores the quotient in R0 and the remainder in R1. If reg4 is 0 then overflow flag is set and content of R0 and R1 are set to 0
 - `not`
+
+    Performs bitwise NOT of reg2. Stores the result in reg1.
 - `cmp`
+
+    Compares reg1 and reg2 and sets up the FLAGS register.
 
 Type D
 - `ld`
+
+    Loads data from mem_addr into reg1.
 - `st`
-- `cmp`
+
+    Stores data from reg1 to mem_addr.
 
 Type E
 - `jmp`
+
+    Jumps to mem_addr, where mem_addr is a memory address.
 - `jlt`
+
+    Jump to mem_addr if the less than flag is set (less than flag = 1), where mem_addr is a memory address.
 - `jgt`
+
+    Jump to mem_addr if the greater than flag is set (greater than flag= 1), where mem_addr is a memory address.
 - `je`
+    
+    Jump to mem_addr if the equal flag is set (equal flag = 1), where mem_addr is a memory address.
 
 Type F
 - `hlt`
+    
+    Stops the machine from executing until reset
 
 ## Assembly Syntax
 
