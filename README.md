@@ -18,35 +18,72 @@ The assembler will then generate a binary file containing the assembled machine 
 
 ## Assembly Syntax
 
-The assembler uses a simplified syntax for the assembly code. The following is an example of the syntax:
+The assembler uses a simplified syntax for the assembly code. The following are examples of the syntax for various types of instructions:
 
+
+Type A
 ```
-<instruction> <operand 1>, <operand 2>
+<instruction> <reg 1> <reg 2> <reg 3>
 ```
 
-For example, the `add` instruction could be written as:
-
+Type B
 ```
-add r1, r2
+<instruction> <reg 1> <$Imm>
+```
+
+Type C
+```
+
+<instruction> <reg 1> <reg 2>
+```
+
+Type D
+```
+<instruction> <reg 1> <mem_addr>
+```
+
+Type E
+```
+<instruction> <mem_addr>
+```
+
+Type F
+```
+<instruction>
 ```
 
 ## Supported Instructions
 
-The assembler supports the following instructions:
+The ISA has 6 encoding types of instructions. The assembler supports the following instructions:
 
-- `add`
+A
+- `add` - Performs reg1 = reg2 + reg3. If the computation overflows, then the overflow flag is set and 0 is written in reg1
 - `sub`
-- `and`
-- `or`
+- `mul`
 - `xor`
-- `not`
+- `or`
+- `and`
+
+B
 - `mov`
+- `rs`
+- `ls`
+C
+- `mov`
+- `div`
+- `not`
+- `cmp`
+D
 - `ld`
 - `st`
-- `jmp`
-- `jz`
-- `jnz`
 - `cmp`
+E
+- `jmp`
+- `jlt`
+- `jgt`
+- `je`
+F
+- `hlt`
 
 ## Example
 
