@@ -16,42 +16,6 @@ python assembler.py <assembly_file>
 
 The assembler will then generate a binary file containing the assembled machine code, with the same name as the assembly file but with a `.bin` extension.
 
-## Assembly Syntax
-
-The assembler uses a simplified syntax for the assembly code. The following are examples of the syntax for various types of instructions:
-
-
-Type A
-```
-<instruction> <reg 1> <reg 2> <reg 3>
-```
-
-Type B
-```
-<instruction> <reg 1> <$Imm>
-```
-
-Type C
-```
-
-<instruction> <reg 1> <reg 2>
-```
-
-Type D
-```
-<instruction> <reg 1> <mem_addr>
-```
-
-Type E
-```
-<instruction> <mem_addr>
-```
-
-Type F
-```
-<instruction>
-```
-
 ## Supported Instructions
 
 The ISA has 6 encoding types of instructions. The assembler supports the following instructions:
@@ -90,6 +54,42 @@ E
 
 F
 - `hlt`
+
+## Assembly Syntax
+
+The assembler uses a simplified syntax for the assembly code. The following are examples of the syntax for various types of instructions:
+
+
+Type A
+```
+<instruction> <reg 1> <reg 2> <reg 3>
+```
+
+Type B
+```
+<instruction> <reg 1> <$Imm>
+```
+
+Type C
+```
+
+<instruction> <reg 1> <reg 2>
+```
+
+Type D
+```
+<instruction> <reg 1> <mem_addr>
+```
+
+Type E
+```
+<instruction> <mem_addr>
+```
+
+Type F
+```
+<instruction>
+```
 
 ## Example
 
