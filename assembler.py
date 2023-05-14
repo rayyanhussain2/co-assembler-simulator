@@ -101,17 +101,17 @@ else:
         #Handling Flags error
         if len(curr_line) == 3:
             if curr_line[2] == "FLAGS" and curr_line[0] != "mov":
-                error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
+                error_indices.append([str(i),"Illegal use of FLAGS register", "d"])
                 continue
 
         elif len(curr_line) == 2:
             if curr_line[1] == "FLAGS":
-                error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
+                error_indices.append([str(i),"Illegal use of FLAGS register", "d"])
                 continue
 
         elif len(curr_line) == 4:
             if "FLAGS" in curr_line:
-                error_indices.append([str(i),"ILLEGAL USE OF FLAGS REGISTER", "d"])
+                error_indices.append([str(i),"Illegal use of FLAGS register", "d"])
                 continue
 
         #Handling case where there are typos in instruction name
@@ -144,7 +144,7 @@ else:
             elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
                 imm_flag=True
                 if not((isinstance(eval(curr_line[2][1:]), int) == True) and (int(curr_line[2][1:]) >= 0) and (int(curr_line[2][1:]) <= (127))):
-                    error_indices.append([str(i), "illegal immediate value", 'e'])
+                    error_indices.append([str(i), "Illegal immediate value " + curr_line[2][1:], 'e'])
                     imm_flag=False
                 
                 #If the registers are valid and the immediate value is correct
@@ -261,18 +261,23 @@ else:
 
 #printing 
 if(len(error_indices) == 0):
-      
-          outputfile = open('output.txt','w')
+          outputfile_name = sys.argv[1][0:-4] + ".bin"
+          outputfile = open(outputfile_name,'w')
           outputfile.writelines(line + '\n' for line in machine_code_list)
           outputfile.close()
 else:
-    pass
+    print("Error(s) found in the assembly code.")
+    print()
+    for i in error_indices:
+        print("Line: " + i[0] + ": " + i[1])
+        print()
 #------------------------------------------------------------------------------
 
 
 
 
 #For Debug purpose, shall delete later
+'''
 print()
 print(input_assembly_codes)
 print()
@@ -287,3 +292,4 @@ print()
 print(label_dict)
 print()
 print(error_indices)
+'''
