@@ -1,3 +1,0 @@
-hlt
-var abc
-var xyz

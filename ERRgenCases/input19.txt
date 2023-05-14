@@ -1,3 +1,0 @@
-var XYZ
-LD R1 XYZ
-hlt

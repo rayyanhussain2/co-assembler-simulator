@@ -1,2 +1,0 @@
-cmp R1 FLAGS
-hlt
