@@ -85,13 +85,6 @@ if(len(input_assembly_codes) > 128):
 
 #parsing the instructions
 else:
-    input_assembly_codes_temp = input_assembly_codes[:]
-    input_assembly_codes = list()
-    #removing all the var lines in the code
-    for i in range(len(input_assembly_codes_temp)):
-        if(input_assembly_codes_temp[i].split()[0] != 'var'):
-            input_assembly_codes.append(input_assembly_codes_temp[i])
-
     #reading through the list of assembly codes and converting to machine and handling errors
     for i in range(len(input_assembly_codes)):
         #Handling the case where the opcodes are valid, else would be the error handling
@@ -165,6 +158,8 @@ else:
                 if(curr_line[1] in register_dict.keys() and curr_line[2] in variable_dict.keys()):
                     unused_bits = "0" * (1)
                     machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + variable_dict[curr_line[2]])
+                    #storing all the variables that are used but not declared
+                    used_variables.append(curr_line[2])
                 else:
                     #if the error lies in register
                     if(curr_line[1] not in register_dict.keys()):
