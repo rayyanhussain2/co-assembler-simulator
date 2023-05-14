@@ -94,17 +94,17 @@ else:
         #Handling Flags error
         if len(curr_line) == 3:
             if curr_line[2] == "FLAGS" and curr_line[0] != "mov":
-                error_indices.append([str(i),"Illegal use of FLAGS register", "d"])
+                error_indices.append([str(i+1),"Illegal use of FLAGS register", "d"])
                 continue
 
         elif len(curr_line) == 2:
             if curr_line[1] == "FLAGS":
-                error_indices.append([str(i),"Illegal use of FLAGS register", "d"])
+                error_indices.append([(str(i+1)),"Illegal use of FLAGS register", "d"])
                 continue
 
         elif len(curr_line) == 4:
             if "FLAGS" in curr_line:
-                error_indices.append([str(i),"Illegal use of FLAGS register", "d"])
+                error_indices.append([str(i+1),"Illegal use of FLAGS register", "d"])
                 continue
 
         #Handling case where there are typos in instruction name
@@ -129,15 +129,15 @@ else:
                             error_message += curr_line[2] + " "
                         if(curr_line[3] not in register_dict.keys()):
                             error_message += curr_line[3] + " "
-                        error_indices.append([str(i), error_message, 'a_reg'])
+                        error_indices.append([str(i+1), error_message, 'a_reg'])
                 else:
-                    error_indices.append([str(i),"general syntax error"])
+                    error_indices.append([str(i+1),"general syntax error"])
 
             #If opcode is of type B
             elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
                 imm_flag=True
                 if not((isinstance(eval(curr_line[2][1:]), int) == True) and (int(curr_line[2][1:]) >= 0) and (int(curr_line[2][1:]) <= (127))):
-                    error_indices.append([str(i), "Illegal immediate value " + curr_line[2][1:], 'e'])
+                    error_indices.append([str(i+1), "Illegal immediate value " + curr_line[2][1:], 'e'])
                     imm_flag=False
                 
                 #If the registers are valid and the immediate value is correct
@@ -150,7 +150,7 @@ else:
                     else:
                         pass
                 else:
-                    error_indices.append([str(i), curr_line[1], 'a_reg'])
+                    error_indices.append([str(i+1), curr_line[1], 'a_reg'])
         
             #If opcode is of type D
             elif op_dict[curr_line[0]][1] == 'D':
@@ -163,14 +163,14 @@ else:
                 else:
                     #if the error lies in register
                     if(curr_line[1] not in register_dict.keys()):
-                        error_indices.append([str(i), curr_line[1], 'a_reg'])
+                        error_indices.append([str(i+1), curr_line[1], 'a_reg'])
                 
                     #Label used in place of variable
                     if(curr_line[2] in list(label_dict.keys())):
-                        error_indices.append([str(i), f"Label {curr_line[2]} misused here", 'f'])
+                        error_indices.append([str(i+1), f"Label {curr_line[2]} misused here", 'f'])
                     #if the error lies in variable
                     elif(curr_line[2] not in variable_dict.keys()):
-                        error_indices.append([str(i), curr_line[2], 'b'])
+                        error_indices.append([str(i+1), curr_line[2], 'b'])
                         #storing all the variables that are used but not declared
                         used_variables.append(curr_line[2])
         
@@ -188,7 +188,7 @@ else:
                         error_message += curr_line[1] + " "
                     if(curr_line[2] not in register_dict.keys()):
                         error_message += curr_line[2] + " "
-                    error_indices.append([str(i), error_message, 'a_reg'])
+                    error_indices.append([str(i+1), error_message, 'a_reg'])
 
             elif op_dict[curr_line[0]][1] == 'C' :
                 #If the registers are valid
@@ -203,7 +203,7 @@ else:
                         error_message += curr_line[1] + " "
                     if(curr_line[2] not in register_dict.keys()):
                         error_message += curr_line[2] + " "
-                    error_indices.append([str(i), error_message, 'a_reg'])
+                    error_indices.append([str(i+1), error_message, 'a_reg'])
             
             #if op code is of type E
             elif op_dict[curr_line[0]][1] == 'E':
@@ -216,9 +216,9 @@ else:
                     machine_code_list.append(s)
                 else:
                     if (curr_line[1] in list(variable_dict.keys())):
-                        error_indices.append([str(i), f"Misuse of variable {curr_line[1]} here", 'f'])
+                        error_indices.append([str(i+1), f"Misuse of variable {curr_line[1]} here", 'f'])
                     else:
-                        error_indices.append([str(i), curr_line[1], 'c'])
+                        error_indices.append([str(i+1), curr_line[1], 'c'])
         
             #if op code is of type F
             elif op_dict[curr_line[0]][1] == 'F':
@@ -226,7 +226,7 @@ else:
                 machine_code_list.append(s)
         
         else:
-            error_indices.append([str(i), "Invalid operation name: " + curr_line[0] , 'a_opcode'])
+            error_indices.append([str(i+1), "Invalid operation name: " + curr_line[0] , 'a_opcode'])
         
         #Counting number of hlt instances
         if input_assembly_codes[i]=='hlt':
@@ -235,9 +235,9 @@ else:
 
     #Handling hlt errors
     if (hlt_counter <= 1 and input_assembly_codes[-1] != "hlt"):
-        error_indices.append([str(i),"Last instruction not hlt",'i'])
+        error_indices.append([str(i+1),"Last instruction not hlt",'i'])
     elif hlt_counter > 1:
-        error_indices.append([str(i),"Multiple instances of hlt found",'i'])
+        error_indices.append([str(i+1),"Multiple instances of hlt found",'i'])
 
     #Handling variable declaration error 
     used_variables = list(set(used_variables))
