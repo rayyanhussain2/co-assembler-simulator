@@ -258,7 +258,8 @@ else:
 if(len(error_indices) == 0):
           outputfile_name = sys.argv[1][0:-4] + ".bin"
           outputfile = open(outputfile_name,'w')
-          outputfile.writelines(line + '\n' for line in machine_code_list)
+          outputfile.writelines(line + '\n' for line in machine_code_list[0:len(machine_code_list)-1])
+          outputfile.write(machine_code_list[-1])
           outputfile.close()
 else:
     print("Error(s) found in the assembly code.")
