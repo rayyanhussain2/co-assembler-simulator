@@ -29,8 +29,7 @@ error_indices = []
 
 
 #input
-#req_file=sys.argv[1]
-req_file='HARDcases/input36.txt'
+req_file=sys.argv[1]
 input_file=open(req_file,'r')
 #these are inputted by user
 input_assembly_codes=input_file.read().splitlines()
