@@ -227,7 +227,7 @@ else:
         
             #if op code is of type F
             elif op_dict[curr_line[0]][1] == 'F':
-                s = "1001100000000000"
+                s = "1101000000000000"
                 machine_code_list.append(s)
         
         else:
@@ -269,7 +269,7 @@ else:
     print("Error(s) found in the assembly code.")
     print()
     for i in error_indices:
-        print("Line: " + i[0] + ": " + i[1])
+        print("Line: " + str(i[0]) + ": " + i[1])
         print()
 #------------------------------------------------------------------------------
 
