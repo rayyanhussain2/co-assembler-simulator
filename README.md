@@ -1,5 +1,68 @@
-CO-ASSEMBLER-SIMULATOR ASSIGNMENT
+# Python ISA Assembler
 
-The above github repository contains the Assembler for the assignment of 2023 Winter Semester course Computer Organization
+This repository contains a Python-based assembler for the **CSE 112 Assignment** instruction set architecture (ISA). 
 
+## Requirements
+
+To use this assembler, you must have Python 3.x installed on your computer. 
+
+## Usage
+
+To use the assembler, simply run the `assembler.py` script with the file name of the assembly code you wish to assemble as the argument:
+
+```
+python assembler.py <assembly_file>
+```
+
+The assembler will then generate a binary file containing the assembled machine code, with the same name as the assembly file but with a `.bin` extension.
+
+## Assembly Syntax
+
+The assembler uses a simplified syntax for the assembly code. The following is an example of the syntax:
+
+```
+<instruction> <operand 1>, <operand 2>
+```
+
+For example, the `add` instruction could be written as:
+
+```
+add r1, r2
+```
+
+## Supported Instructions
+
+The assembler supports the following instructions:
+
+- `add`
+- `sub`
+- `and`
+- `or`
+- `xor`
+- `not`
+- `mov`
+- `ld`
+- `st`
+- `jmp`
+- `jz`
+- `jnz`
+- `cmp`
+
+## Example
+
+An example assembly code file named `example.asm` is included in the repository. To assemble it, run the following command:
+
+```
+python assembler.py example.asm
+```
+
+This will generate a binary file named `example.bin` containing the assembled machine code.
+
+## Contributing
+
+Contributions to the assembler are welcome! If you find a bug or have an idea for an improvement, please submit an issue or pull request.
+
+## License
+
+This assembler is released under the [MIT License](https://opensource.org/licenses/MIT).
 
