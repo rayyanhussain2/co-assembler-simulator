@@ -174,7 +174,7 @@ else:
                         error_indices.append([str(i+1), f"Label {curr_line[2]} misused here", 'f'])
                     #if the error lies in variable
                     elif(curr_line[2] not in variable_dict.keys()):
-                        error_indices.append([str(i+1), "No variable name \"" + curr_line[2] + "\"", 'b'])
+                        error_indices.append([str(i+1), "Variable \"" + curr_line[2] + "\" does not exist.", 'b'])
                         #storing all the variables that are used but not declared
                         used_variables.append(curr_line[2])
         
@@ -193,6 +193,7 @@ else:
                     if(curr_line[2] not in register_dict.keys()):
                         error_message += curr_line[2] + " "
                     error_indices.append([str(i+1), error_message, 'a_reg'])
+            
             #other type c commands
             elif op_dict[curr_line[0]][1] == 'C' :
                 #If the registers are valid and length is valid
@@ -214,8 +215,6 @@ else:
                             error_message += curr_line[2] + " "
                         error_indices.append([str(i+1), error_message, 'a_reg'])
                     
-
-            
             #if op code is of type E
             elif op_dict[curr_line[0]][1] == 'E':
 
@@ -229,7 +228,7 @@ else:
                     if (curr_line[1] in list(variable_dict.keys())):
                         error_indices.append([str(i+1), f"Misuse of variable {curr_line[1]} here", 'f'])
                     else:
-                        error_indices.append([str(i+1), curr_line[1], 'c'])
+                        error_indices.append([str(i+1), "Label \"" + curr_line[1] + "\" does not exist.", 'e'])
         
             #if op code is of type F
             elif op_dict[curr_line[0]][1] == 'F':
