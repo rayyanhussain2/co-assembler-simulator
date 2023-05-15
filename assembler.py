@@ -136,9 +136,13 @@ else:
             #If opcode is of type B
             elif op_dict[curr_line[0]][1] == 'B' and curr_line[2] not in register_dict.keys():
                 imm_flag=True
+                #illegal immediate value
                 if not((isinstance(eval(curr_line[2][1:]), int) == True) and (int(curr_line[2][1:]) >= 0) and (int(curr_line[2][1:]) <= (127))):
                     error_indices.append([str(i+1), "Illegal immediate value " + curr_line[2][1:], 'e'])
                     imm_flag=False
+                #if the immediate val does not have an $ sign
+                if(curr_line[2][0] != '$'):
+                    error_indices.append([str(i+1), "Undefined Register or immediate value " + "\"" + curr_line[2] + "\"", 'e'])
                 
                 #If the registers are valid and the immediate value is correct
                 if(curr_line[1] in register_dict.keys()):
@@ -170,11 +174,11 @@ else:
                         error_indices.append([str(i+1), f"Label {curr_line[2]} misused here", 'f'])
                     #if the error lies in variable
                     elif(curr_line[2] not in variable_dict.keys()):
-                        error_indices.append([str(i+1), curr_line[2], 'b'])
+                        error_indices.append([str(i+1), "No variable name \"" + curr_line[2] + "\"", 'b'])
                         #storing all the variables that are used but not declared
                         used_variables.append(curr_line[2])
         
-            #if opcode is of type C
+            #if opcode is of type C mov
             elif curr_line[0] == 'mov' and curr_line[2] in register_dict.keys():
                 #If the registers are valid
                 if(curr_line[1] in register_dict.keys() and curr_line[2] in register_dict.keys()):
@@ -189,21 +193,28 @@ else:
                     if(curr_line[2] not in register_dict.keys()):
                         error_message += curr_line[2] + " "
                     error_indices.append([str(i+1), error_message, 'a_reg'])
-
+            #other type c commands
             elif op_dict[curr_line[0]][1] == 'C' :
-                #If the registers are valid
-                if(curr_line[1] in register_dict.keys() and curr_line[2] in register_dict.keys()):
+                #If the registers are valid and length is valid
+                if(curr_line[1] in register_dict.keys() and curr_line[2] in register_dict.keys() and len(curr_line) == 3):
                     unused_bits = "0" * (5)
                     machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + register_dict[curr_line[2]])
                 else:
                     #creating a string var to store the error message which contains all the registers that are faulty.
                     #This message will be later parsed and printed out as required.
-                    error_message = ""
-                    if(curr_line[1] not in register_dict.keys()):
-                        error_message += curr_line[1] + " "
-                    if(curr_line[2] not in register_dict.keys()):
-                        error_message += curr_line[2] + " "
-                    error_indices.append([str(i+1), error_message, 'a_reg'])
+                    #if the length is wrong
+                    if(len(curr_line) != 3):
+                        error_indices.append([str(i+1), "Can't compare more than 2 registers", 'a_reg'])
+                    else:
+                        #other errors
+                        error_message = ""
+                        if(curr_line[1] not in register_dict.keys()):
+                            error_message += curr_line[1] + " "
+                        if(curr_line[2] not in register_dict.keys()):
+                            error_message += curr_line[2] + " "
+                        error_indices.append([str(i+1), error_message, 'a_reg'])
+                    
+
             
             #if op code is of type E
             elif op_dict[curr_line[0]][1] == 'E':
@@ -265,7 +276,7 @@ else:
     print("Error(s) found in the assembly code.")
     print()
     for i in error_indices:
-        print("Line: " + str(i[0]) + ": " + i[1])
+        print("Line " + str(i[0]) + ": " + i[1])
         print()
 #------------------------------------------------------------------------------
 
@@ -287,5 +298,6 @@ print(register_dict)
 print()
 print(label_dict)
 print()
-print(error_indices)
 '''
+print(error_indices)
+
