@@ -1,5 +1,6 @@
 import sys
 
+
 #constant variables
 op_dict = {'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov': ['00010', 'B'], 'mov_reg': ['00011', 'C'],
           'ld': ['00100', 'D'], 'st': ['00101', 'D'], 'mul': ['00110', 'A'], 'div': ['00111', 'C'],
@@ -266,7 +267,7 @@ else:
             error_indices.append(["-","Variables not declared in the beginning","g"])    
 
     for i in range(len(variable_dict), len(input_assembly_codes)):
-        print(input_assembly_codes[0:3])
+        
         if input_assembly_codes[i][0:3] == "var":
             error_indices.append([str(i+1),"Variables not declared in the beginning","g"])         
 #------------------------------------------------------------------------------
@@ -286,9 +287,14 @@ if(len(error_indices) == 0):
 else:
     print("Error(s) found in the assembly code.")
     print()
-    for i in error_indices:
-        print("Line " + str(i[0]) + ": " + i[1])
-        print()
+    
+
+    error_indices=sorted(error_indices,key=lambda l:int(l[0]),reverse=False)
+    
+
+    with open('error.txt','w') as fh:
+        fh.writelines(("Line " + str(i[0]) + ": " + i[1]+"\n") for i in error_indices[0:len(error_indices)-1])
+        fh.write("Line " + str(error_indices[-1][0]) + ": " + error_indices[-1][1])
 #------------------------------------------------------------------------------
 
 
