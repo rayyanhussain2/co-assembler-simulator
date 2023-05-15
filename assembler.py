@@ -29,8 +29,13 @@ error_indices = []
 
 
 #input
-req_file=sys.argv[1]
-input_file=open(req_file,'r')
+try:
+    req_file=sys.argv[1]
+    input_file=open(req_file,'r')
+
+except:
+    print("File not found!")
+    sys.exit()
 #these are inputted by user
 input_assembly_codes=input_file.read().splitlines()
 input_assembly_codes = [i for i in input_assembly_codes if i != ""]
