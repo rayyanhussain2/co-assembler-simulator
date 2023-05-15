@@ -252,14 +252,15 @@ else:
     #Handling variable declaration error 
     used_variables = list(set(used_variables))
     flag_var = True
-    for i in range(len(used_variables)):
-        if(input_assembly_codes[i].split()[0] != 'var'):
-            flag_var = False
+    if len(used_variables) != 0:
+        for i in range(len(used_variables)):
+            if(input_assembly_codes[i].split()[0] != 'var'):
+                flag_var = False
 
-    if not flag_var:
-        error_indices.append(["-","Variables not declared in the beginning","g"])    
+        if not flag_var:
+            error_indices.append(["-","Variables not declared in the beginning","g"])    
 
-    for i in range(len(used_variables), len(input_assembly_codes)):
+    for i in range(len(variable_dict), len(input_assembly_codes)):
         print(input_assembly_codes[0:3])
         if input_assembly_codes[i][0:3] == "var":
             error_indices.append([str(i+1),"Variables not declared in the beginning","g"])         
