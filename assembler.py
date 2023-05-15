@@ -262,7 +262,7 @@ else:
     for i in range(len(used_variables), len(input_assembly_codes)):
         print(input_assembly_codes[0:3])
         if input_assembly_codes[i][0:3] == "var":
-            error_indices.append([str(i+1),"Variables not declared in the beginning","g"])  
+            error_indices.append([str(i+1),"Variables not declared in the beginning","g"])         
 #------------------------------------------------------------------------------
 
 
