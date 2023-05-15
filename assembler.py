@@ -303,6 +303,6 @@ print(register_dict)
 print()
 print(label_dict)
 print()
-'''
 print(error_indices)
+'''
 
