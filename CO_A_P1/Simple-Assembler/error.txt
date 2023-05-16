@@ -1,0 +1,2 @@
+Line 8: Variable "myvar" does not exist.
+Line 9: Variable "myvar" does not exist.
