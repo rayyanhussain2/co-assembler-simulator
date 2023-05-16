@@ -1,9 +1,0 @@
-var var1
-var var2
-var var3
-ld R1 var1
-ld R2 var2
-st R3 var3
-jmp hlt_label
-add R1 R2 R3
-hlt_label: hlt
