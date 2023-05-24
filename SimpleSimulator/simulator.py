@@ -14,5 +14,28 @@ register_dict={'000':['R0','-'],'001':['R1','-'],'010':['R2','-'],'011':['R3','-
 pc=0
 halt= False
 #taking inputs fr fr
-input_assembly_codes = sys.stdin.readlines()
+with open("test.txt","r") as f:
+    input_binary_codes = f.readlines()
+    input_binary_codes = [i.strip() for i in input_binary_codes]
 
+print(input_binary_codes)
+var_count = 0; label_count = 0; var_dict = {} ; label_dict = {}
+for i in range(len(input_binary_codes)):
+    binary_instruction = input_binary_codes[i]
+    op_code = binary_instruction[0:5]
+    print(binary_instruction)
+    if (op_code == "00100" or op_code == "00101"):
+        var_count += 1
+        var = "var" + str(var_count)
+
+        mem_address = binary_instruction[-8:-1] 
+        if mem_address not in var_dict.values():
+            var_dict[var] = mem_address
+
+    elif (op_code in ["01111","11100","11101","11111"]):
+        label_count += 1
+        label = "label" + str(label_count)
+
+        mem_address = binary_instruction[-8:-1]
+        if mem_address not in label_dict.values():   
+            label_dict[label] = mem_address
