@@ -13,7 +13,7 @@ register_dict={'000':['R0','-'],'001':['R1','-'],'010':['R2','-'],'011':['R3','-
 #program counter
 pc=0
 halt= False
-#taking inputs fr fr
+#taking inputs
 with open("test.txt","r") as f:
     input_binary_codes = f.readlines()
     input_binary_codes = [i.strip() for i in input_binary_codes]
