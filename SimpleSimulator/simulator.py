@@ -10,7 +10,7 @@ op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], 
 #register dictionary
 register_dict={'000':['R0','-'],'001':['R1','-'],'010':['R2','-'],'011':['R3','-'],'100':['R4','-'],'101':['R5','-'],'110':['R6','-'],'111':['FLAGS','-']}
 
-#program counter
+#the program counter
 pc=0
 halt= False
 #taking inputs
