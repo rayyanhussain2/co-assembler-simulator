@@ -24,8 +24,31 @@ i = 0
 while True:
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
-
-    if (op_code == "00100" or op_code == "00101"):
+    if(op_code=="00000"):
+        val=register_dict[binary_instruction[10:13]][1]+register_dict[binary_instruction[13:16]][1]
+        if(val>=0 and val<=127):
+            register_dict[binary_instruction[7:10]][1]=val
+    elif(op_code=="00001"):
+        val=register_dict[binary_instruction[10:13]][1]-register_dict[binary_instruction[13:16]][1]
+        if(val>=0 and val<=127):
+            register_dict[binary_instruction[7:10]][1]=val
+    elif(op_code=="00110"):
+        val=register_dict[binary_instruction[10:13]][1]*register_dict[binary_instruction[13:16]][1]
+        if(val>=0 and val<=127):
+            register_dict[binary_instruction[7:10]][1]=val
+    elif(op_code=="01010"):
+        val=register_dict[binary_instruction[10:13]][1]^register_dict[binary_instruction[13:16]][1]
+        if(val>=0 and val<=127):
+            register_dict[binary_instruction[7:10]][1]=val
+    elif(op_code=="01011"):
+        val=register_dict[binary_instruction[10:13]][1] | register_dict[binary_instruction[13:16]][1]
+        if(val>=0 and val<=127):
+            register_dict[binary_instruction[7:10]][1]=val
+    elif(op_code=="01100"):
+        val=register_dict[binary_instruction[10:13]][1] & register_dict[binary_instruction[13:16]][1]
+        if(val>=0 and val<=127):
+            register_dict[binary_instruction[7:10]][1]=val
+    elif (op_code == "00100" or op_code == "00101"):
         var_count += 1
         var = "var" + str(var_count)
 
