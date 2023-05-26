@@ -8,7 +8,7 @@ op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], 
           '11100': ['jlt', 'E'], '11101': ['jgt', 'E'], '11111': ['je', 'E'], '11010': ['hlt', 'F'], 'var': ['', '']}
 
 #register dictionary
-register_dict={'000':['R0','-'],'001':['R1','-'],'010':['R2','-'],'011':['R3','-'],'100':['R4','-'],'101':['R5','-'],'110':['R6','-'],'111':['FLAGS','-']}
+register_dict={'000':['R0','0000000000000000'],'001':['R1','0000000000000000'],'010':['R2','0000000000000000'],'011':['R3','0000000000000000'],'100':['R4','0000000000000000'],'101':['R5','0000000000000000'],'110':['R6','0000000000000000'],'111':['FLAGS', "0000000000000000"]}
 
 #the program counter
 pc=0
@@ -18,8 +18,10 @@ with open("test.txt","r") as f:
     input_binary_codes = f.readlines()
     input_binary_codes = [i.strip() for i in input_binary_codes]
 
+#Parsing each line of instruction
 var_count = 0; label_count = 0; var_dict = {} ; label_dict = {}
-for i in range(len(input_binary_codes)):
+i = 0
+while True:
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
 
@@ -38,3 +40,33 @@ for i in range(len(input_binary_codes)):
         mem_address = binary_instruction[-8:-1]
         if mem_address not in label_dict.values():   
             label_dict[label] = mem_address
+
+    #Type F
+    elif(op_code == "11010"):
+        break
+
+    #Type E 
+    elif(op_code == "01111"):
+        i = int(binary_instruction[5:]) - 1
+        continue
+
+    elif(op_code == "11100"):
+        if(register_dict[111][1][-3] == '1'):
+            i = int(binary_instruction[5:]) - 1
+            continue
+
+    elif(op_code == "11101"):
+        if(register_dict[111][1][-2] == '1'):
+            i = int(binary_instruction[5:]) - 1
+            continue
+        
+    elif(op_code == "11111"):
+        if(register_dict[111][1][-1] == '1'):
+            i = int(binary_instruction[5:]) - 1
+            continue
+
+
+
+
+    #incrementing the counter 
+    i += 1
