@@ -8,7 +8,7 @@ op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], 
           '11100': ['jlt', 'E'], '11101': ['jgt', 'E'], '11111': ['je', 'E'], '11010': ['hlt', 'F'], 'var': ['', '']}
 
 #register dictionary
-register_dict={'000':['R0',0],'001':['R1',0],'010':['R2',0],'011':['R3',0],'100':['R4',0],'101':['R5',0],'110':['R6',0],'111':['FLAGS', 0]}
+register_dict={'000':['R0',"0000000"],'001':['R1',"0000000"],'010':['R2',"0000000"],'011':['R3',"0000000"],'100':['R4',"0000000"],'101':['R5',"0000000"],'110':['R6',"0000000"],'111':['FLAGS', "0000000"]}
 
 #the program counter
 pc=0
@@ -25,29 +25,53 @@ while True:
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
     if(op_code=="00000"):
-        val=register_dict[binary_instruction[10:13]][1]+register_dict[binary_instruction[13:16]][1]
+        val1="0b"+register_dict[binary_instruction[10:13]][1]
+        val2="0b"+register_dict[binary_instruction[13:16]][1]
+        val1,val2=int(val1,2),int(val2,2)
+        val=val1+val2
         if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]=val
+            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
     elif(op_code=="00001"):
-        val=register_dict[binary_instruction[10:13]][1]-register_dict[binary_instruction[13:16]][1]
+        val1="0b"+register_dict[binary_instruction[10:13]][1]
+        val2="0b"+register_dict[binary_instruction[13:16]][1]
+        val1,val2=int(val1,2),int(val2,2)
+        val=val1-val2
+        
+        
         if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]=val
+            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
     elif(op_code=="00110"):
-        val=register_dict[binary_instruction[10:13]][1]*register_dict[binary_instruction[13:16]][1]
+        val1="0b"+register_dict[binary_instruction[10:13]][1]
+        val2="0b"+register_dict[binary_instruction[13:16]][1]
+        val1,val2=int(val1,2),int(val2,2)
+        val=val1*val2
         if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]=val
+            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
     elif(op_code=="01010"):
-        val=register_dict[binary_instruction[10:13]][1]^register_dict[binary_instruction[13:16]][1]
+        val1="0b"+register_dict[binary_instruction[10:13]][1]
+        val2="0b"+register_dict[binary_instruction[13:16]][1]
+        val1,val2=int(val1,2),int(val2,2)
+        val=val1^val2
+        
         if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]=val
+            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
     elif(op_code=="01011"):
-        val=register_dict[binary_instruction[10:13]][1] | register_dict[binary_instruction[13:16]][1]
+        val1="0b"+register_dict[binary_instruction[10:13]][1]
+        val2="0b"+register_dict[binary_instruction[13:16]][1]
+        val1,val2=int(val1,2),int(val2,2)
+        val=val1 | val2
+        
         if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]=val
+           register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
     elif(op_code=="01100"):
-        val=register_dict[binary_instruction[10:13]][1] & register_dict[binary_instruction[13:16]][1]
+        val1="0b"+register_dict[binary_instruction[10:13]][1]
+        val2="0b"+register_dict[binary_instruction[13:16]][1]
+        val1,val2=int(val1,2),int(val2,2)
+        val=val1 & val2
         if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]=val
+           register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
+    
+
     elif (op_code == "00100" or op_code == "00101"):
         var_count += 1
         var = "var" + str(var_count)
