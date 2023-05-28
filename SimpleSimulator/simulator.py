@@ -70,7 +70,28 @@ while True:
         val=val1 & val2
         if(val>=0 and val<=127):
            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
-    
+    elif(op_code=="00010"):
+        val=binary_instruction[9:]
+        register_dict[binary_instruction[6:9]][1]=val
+    elif(op_code=="01000"):
+        val="0b"+binary_instruction[9:]
+        val=int(val,2)
+        nval=register_dict[binary_instruction[6:9]][1]
+        nval=int("0b"+nval,2)
+        nval= nval >> val
+        if(nval>=0 and nval<=127):
+            register_dict[binary_instruction[6:9]][1]="0"*(7-len(bin(nval)[2:]))+bin(nval)[2:]
+    elif(op_code=="01001"):
+        val="0b"+binary_instruction[9:]
+        val=int(val,2)
+        nval=register_dict[binary_instruction[6:9]][1]
+        nval=int("0b"+nval,2)
+        nval= nval << val
+        if(nval>=0 and nval<=127):
+            register_dict[binary_instruction[6:9]][1]="0"*(7-len(bin(nval)[2:]))+bin(nval)[2:]
+
+        
+        
 
     elif (op_code == "00100" or op_code == "00101"):
         var_count += 1
