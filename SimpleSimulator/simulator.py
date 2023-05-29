@@ -168,6 +168,7 @@ while True:
             register_dict['111'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
             register_dict['000'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
             register_dict['001'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
+            
         else:
             valQ=val1//val2
             valR=val1%val2
