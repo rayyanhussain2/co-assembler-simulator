@@ -133,6 +133,47 @@ while True:
             i = int(binary_instruction[5:]) - 1
             continue
 
+    #type C
+
+    elif(op_code == "00011"):
+        regval2="0b" + register_dict[binary_instruction[10:13]][1]
+        regval2=int(regval2,2)
+        register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(regval2)[2:]))+bin(regval2)[2:]
+
+
+    elif(op_code == "01101"):
+        regval2="0b" + register_dict[binary_instruction[10:13]][1]
+        regval2=int(regval2,2)
+        regval1= ~regval2
+        register_dict[binary_instruction[6:9]][1]=regval1
+
+    elif(op_code == "01110"):
+        val1="0b"+register_dict[binary_instruction[10:13]][1]
+        val2="0b"+register_dict[binary_instruction[13:16]][1]
+        val1=int(val1,2)
+        val2=int(val2,2)
+
+        if val1>val2:
+            register_dict[111][1][-2] == '1'
+        elif val1<val2:
+            register_dict[111][1][-3] == '1'
+        elif val1==val2:
+            register_dict[111][1][-1] == '1'
+
+    elif(op_code=="00110"):
+        val1="0b" + register_dict[binary_instruction[10:13]][1]
+        val2="0b" + register_dict[binary_instruction[13:16]][1]
+        val1,val2=int(val1,2),int(val2,2)
+        if val2==0:
+            register_dict['111'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
+            register_dict['000'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
+            register_dict['001'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
+        else:
+            valQ=val1//val2
+            valR=val1%val2
+            register_dict['000'][1]="0"*(7-len(bin(valQ)[2:]))+bin(valQ)[2:]
+            register_dict['001'][1]="0"*(7-len(bin(valR)[2:]))+bin(valR)[2:]
+
 
 
 
