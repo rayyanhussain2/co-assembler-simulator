@@ -35,7 +35,7 @@ while True:
             register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
 
         elif (val > 127):
-            register_dict["111"][1]=("0"*12)+"1000"
+            register_dict["111"][1][-4]="1"
 
     elif(op_code=="00001"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
@@ -46,7 +46,7 @@ while True:
             register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
 
         elif (val > 127):
-            register_dict["111"][1]=("0"*12)+"1000"
+            register_dict["111"][1][-4]="1"
 
     elif(op_code=="00110"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
@@ -56,7 +56,7 @@ while True:
         if(val>=0 and val<=127):
             register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
         elif (val > 127):
-            register_dict["111"][1]=("0"*12)+"1000"
+            register_dict["111"][1][-4]="1"
 
     elif(op_code=="01010"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
@@ -123,17 +123,17 @@ while True:
         continue
 
     elif(op_code == "11100"):
-        if(register_dict[111][1][-3] == '1'):
+        if(register_dict["111"][1][-3] == '1'):
             i = int(binary_instruction[5:]) - 1
             continue
 
     elif(op_code == "11101"):
-        if(register_dict[111][1][-2] == '1'):
+        if(register_dict["111"][1][-2] == '1'):
             i = int(binary_instruction[5:]) - 1
             continue
         
     elif(op_code == "11111"):
-        if(register_dict[111][1][-1] == '1'):
+        if(register_dict["111"][1][-1] == '1'):
             i = int(binary_instruction[5:]) - 1
             continue
 
@@ -158,14 +158,11 @@ while True:
         val2=int(val2,2)
 
         if val1>val2:
-            register_dict[111][1][-2] == '1'
-            register_dict["111"][1]=("0"*12)+"0100"
+            register_dict["111"][1][-2]="1"
         elif val1<val2:
-            register_dict[111][1][-3] == '1'
-            register_dict["111"][1]=("0"*12)+"0010"
+            register_dict["111"][1][-3] == '1'
         elif val1==val2:
-            register_dict[111][1][-1] == '1'
-            register_dict["111"][1]=("0"*12)+"0001"
+            register_dict["111"][1][-1]="1"
 
     elif(op_code=="00110"):
         val1="0b" + register_dict[binary_instruction[10:13]][1]
@@ -181,7 +178,7 @@ while True:
             valR=val1%val2
 
             if (valQ > 127):
-                register_dict["111"][1]=("0"*12)+"1000"
+                register_dict["111"][1][-4]="1"
             else:
                 register_dict['000'][1]="0"*(7-len(bin(valQ)[2:]))+bin(valQ)[2:]
                 register_dict['001'][1]="0"*(7-len(bin(valR)[2:]))+bin(valR)[2:]
