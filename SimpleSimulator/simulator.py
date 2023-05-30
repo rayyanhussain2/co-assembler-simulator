@@ -9,9 +9,8 @@ op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], 
 
 #register dictionary
 register_dict={'000':['R0',"0000000000000000"],'001':['R1',"0000000000000000"],'010':['R2',"0000000000000000"],'011':['R3',"0000000000000000"],'100':['R4',"0000000000000000"],'101':['R5',"0000000000000000"],'110':['R6',"0000000000000000"],'111':['FLAGS', "0000000000000000"]}
-
+output = []
 #the program counter
-
 halt= False
 #taking inputs
 with open("test.txt","r") as f:
@@ -185,3 +184,14 @@ while True:
 
     #incrementing the counter 
     i += 1
+
+    #Getting the status
+    pc = str(bin(i)[2:])
+    pc = "0"*(7 - len(pc)) + pc
+    line = pc
+    for i in list(register_dict.values()):
+        line += " "*8
+        line += i[1]
+
+    output.append(line)
+
