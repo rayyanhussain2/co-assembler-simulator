@@ -108,11 +108,10 @@ while True:
 
     #Type D
     elif (op_code == "00100" or op_code == "00101"):
-        var_count += 1
-        var = "var" + str(var_count)
-
         mem_address = binary_instruction[-8:-1] 
         if mem_address not in var_dict.values():
+            var_count += 1
+            var = "var" + str(var_count)
             var_dict[var] = mem_address
 
     #Type F
