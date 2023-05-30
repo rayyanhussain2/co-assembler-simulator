@@ -21,7 +21,7 @@ with open("test.txt","r") as f:
 #Parsing each line of instruction
 var_count = 0; label_count = 0; var_dict = {} ; label_dict = {}
 i = 0
-flags_dict = {"_":12*"0","V":0,"L":0,"G":0,"E":0}
+flags_dict = {"V":0,"L":0,"G":0,"E":0}
 while True:
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
@@ -189,6 +189,11 @@ while True:
 
 
 
-
+    #Updating his flags
+    flags = 12*"0"
+    for i in flags_dict:
+        flags += flags_dict[i]
+    
+    register_dict["111"][1]=flags
     #incrementing the counter 
     i += 1
