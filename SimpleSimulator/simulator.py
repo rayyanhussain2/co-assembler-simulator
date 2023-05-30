@@ -21,7 +21,7 @@ with open("test.txt","r") as f:
 #Parsing each line of instruction
 var_count = 0; label_count = 0; var_dict = {} ; label_dict = {}
 i = 0
-flags = "0"*16
+flags_dict = {"_":12*"0","V":0,"L":0,"G":0,"E":0}
 while True:
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
@@ -36,7 +36,7 @@ while True:
             register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
 
         elif (val > 127):
-            flags = "0000000000001000"
+            flags_dict["V"]=1
 
     elif(op_code=="00001"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
@@ -47,7 +47,7 @@ while True:
             register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
 
         elif (val > 127):
-            flags = "0000000000001000"
+            flags_dict["V"]=1
 
     elif(op_code=="00110"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
@@ -57,7 +57,7 @@ while True:
         if(val>=0 and val<=127):
             register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
         elif (val > 127):
-            flags = "0000000000001000"
+            flags_dict["V"]=1
 
     elif(op_code=="01010"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
@@ -160,13 +160,13 @@ while True:
 
         if val1>val2:
             register_dict[111][1][-2] == '1'
-            flags = "0000000000000100"
+            flags_dict["L"]=1
         elif val1<val2:
             register_dict[111][1][-3] == '1'
-            flags = "0000000000000010"
+            flags_dict["G"]=1
         elif val1==val2:
             register_dict[111][1][-1] == '1'
-            flags = "0000000000000001"
+            flags_dict["E"]=1
 
     elif(op_code=="00110"):
         val1="0b" + register_dict[binary_instruction[10:13]][1]
@@ -182,7 +182,7 @@ while True:
             valR=val1%val2
 
             if (valQ > 127):
-                flags = "0000000000001000"
+                flags_dict["V"]=1
             else:
                 register_dict['000'][1]="0"*(7-len(bin(valQ)[2:]))+bin(valQ)[2:]
                 register_dict['001'][1]="0"*(7-len(bin(valR)[2:]))+bin(valR)[2:]
