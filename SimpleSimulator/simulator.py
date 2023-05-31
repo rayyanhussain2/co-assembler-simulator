@@ -195,3 +195,14 @@ while True:
 
     output.append(line)
 
+
+#Dumping memory
+k = 1 #Indicating line_no
+for i in input_binary_codes:
+    l = f"{k}. {i}"
+    output.append(l)
+    k+=1
+
+for i in list(var_dict.keys()):
+    l = f"{i}: {var_dict[i]}"
+    output.append(l)
