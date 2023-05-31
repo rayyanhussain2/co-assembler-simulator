@@ -189,9 +189,9 @@ while True:
     pc = str(bin(i)[2:])
     pc = "0"*(7 - len(pc)) + pc
     line = pc
-    for i in list(register_dict.values()):
+    for k in list(register_dict.values()):
         line += " "*8
-        line += i[1]
+        line += k[1]
 
     output.append(line)
 
