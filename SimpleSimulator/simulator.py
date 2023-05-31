@@ -10,6 +10,10 @@ op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], 
 #register dictionary
 register_dict={'000':['R0',"0000000000000000"],'001':['R1',"0000000000000000"],'010':['R2',"0000000000000000"],'011':['R3',"0000000000000000"],'100':['R4',"0000000000000000"],'101':['R5',"0000000000000000"],'110':['R6',"0000000000000000"],'111':['FLAGS', "0000000000000000"]}
 output = []
+
+#addres dict
+add_dict={}
+
 #the program counter
 halt= False
 #taking inputs
@@ -181,6 +185,24 @@ while True:
             else:
                 register_dict['000'][1]="0"*(7-len(bin(valQ)[2:]))+bin(valQ)[2:]
                 register_dict['001'][1]="0"*(7-len(bin(valR)[2:]))+bin(valR)[2:]
+
+
+    #type 
+    #load
+    elif(op_code=="00100"):
+        mem=binary_instruction[9:]
+        value="0b" + add_dict[val][0]
+
+        register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(value)[2:]))+bin(value)[2:]
+        
+        
+    #store
+    elif(op_code=="00101"):
+        reg=binary_instruction[9:]
+        mem=register_dict[binary_instruction[6:9]][1]
+        mem=int("0b"+mem,2)
+        add_dict[val][0]=mem
+
 
     #incrementing the counter 
     i += 1
