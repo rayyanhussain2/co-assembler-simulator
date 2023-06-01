@@ -101,8 +101,12 @@ while True:
     #Type B (reg - $IMM)
     #mov
     elif(op_code=="00010"):
-        val=binary_instruction[9:]
-        register_dict[binary_instruction[6:9]][1]=val
+        val=int(("0b"+binary_instruction[9:]),2)
+        if(val > 65535):
+            register_dict["111"][1][-4]="1"
+        else:
+            register_dict[binary_instruction[6:9]][1]=val
+
 
     #rs
     elif(op_code=="01000"):
@@ -113,6 +117,8 @@ while True:
         nval= nval >> val
         if(nval>=0 and nval<=65535):
             register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(nval)[2:]))+bin(nval)[2:]
+        elif(val > 65535):
+            register_dict["111"][1][-4]="1"
 
     #ls
     elif(op_code=="01001"):
@@ -123,6 +129,8 @@ while True:
         nval= nval << val
         if(nval>=0 and nval<=65535):
             register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(nval)[2:]))+bin(nval)[2:]
+        elif(val > 65535):
+            register_dict["111"][1][-4]="1"
 
   
 
