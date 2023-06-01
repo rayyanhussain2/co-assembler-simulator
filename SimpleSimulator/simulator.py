@@ -218,12 +218,17 @@ while True:
 
 
 #Dumping memory
-k = 1 #Indicating line_no
+k = 0 #Indicating line_no
 for i in input_binary_codes:
-    l = f"{k}. {i}"
+    b = str(bin(k)[2:])
+    b = "0"*(7 - len(b)) + b
+    l = f"{b} {i}"
     output.append(l)
     k+=1
 
 for i in list(var_dict.keys()):
-    l = f"{i}: {var_dict[i]}"
+    b = str(bin(k)[2:])
+    b = "0"*(7 - len(b)) + b
+    l = f"{b} {var_dict[i]}"
     output.append(l)
+    k+=1
