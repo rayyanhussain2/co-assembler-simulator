@@ -229,6 +229,6 @@ for i in input_binary_codes:
 for i in list(var_dict.keys()):
     b = str(bin(k)[2:])
     b = "0"*(7 - len(b)) + b
-    l = f"{b} {var_dict[i]}"
+    l = f"{b} {i} {var_dict[i]}"
     output.append(l)
     k+=1
