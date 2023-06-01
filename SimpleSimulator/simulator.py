@@ -35,10 +35,10 @@ while True:
         val2="0b"+register_dict[binary_instruction[13:16]][1]
         val1,val2=int(val1,2),int(val2,2)
         val=val1+val2
-        if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
+        if(val>=0 and val<=65535):
+            register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
 
-        elif (val > 127):
+        elif (val > 65535):
             register_dict["111"][1][-4]="1"
 
     #sub
@@ -48,9 +48,9 @@ while True:
         val1,val2=int(val1,2),int(val2,2)
         val=val1-val2
         if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
+            register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
 
-        elif (val > 127):
+        elif (val > 65535):
             register_dict["111"][1][-4]="1"
 
     #Mul
@@ -59,9 +59,9 @@ while True:
         val2="0b"+register_dict[binary_instruction[13:16]][1]
         val1,val2=int(val1,2),int(val2,2)
         val=val1*val2
-        if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
-        elif (val > 127):
+        if(val>=0 and val<=65535):
+            register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
+        elif (val > 65535):
             register_dict["111"][1][-4]="1"
 
     #xor
@@ -70,8 +70,10 @@ while True:
         val2="0b"+register_dict[binary_instruction[13:16]][1]
         val1,val2=int(val1,2),int(val2,2)
         val=val1^val2
-        if(val>=0 and val<=127):
-            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
+        if(val>=0 and val<=65535):
+            register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
+        elif(val > 65535):
+            register_dict["111"][1][-4]="1"
 
     #or
     elif(op_code=="01011"):
@@ -79,8 +81,11 @@ while True:
         val2="0b"+register_dict[binary_instruction[13:16]][1]
         val1,val2=int(val1,2),int(val2,2)
         val=val1 | val2
-        if(val>=0 and val<=127):
-           register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
+        if(val>=0 and val<=65535):
+           register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
+        elif(val > 65535):
+            register_dict["111"][1][-4]="1"
+
 
     #and
     elif(op_code=="01100"):
@@ -88,8 +93,10 @@ while True:
         val2="0b"+register_dict[binary_instruction[13:16]][1]
         val1,val2=int(val1,2),int(val2,2)
         val=val1 & val2
-        if(val>=0 and val<=127):
-           register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
+        if(val>=0 and val<=65535):
+           register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
+        elif(val > 65535):
+            register_dict["111"][1][-4]="1"
 
     #Type B (reg - $IMM)
     #mov
@@ -104,8 +111,8 @@ while True:
         nval=register_dict[binary_instruction[6:9]][1]
         nval=int("0b"+nval,2)
         nval= nval >> val
-        if(nval>=0 and nval<=127):
-            register_dict[binary_instruction[6:9]][1]="0"*(7-len(bin(nval)[2:]))+bin(nval)[2:]
+        if(nval>=0 and nval<=65535):
+            register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(nval)[2:]))+bin(nval)[2:]
 
     #ls
     elif(op_code=="01001"):
@@ -114,8 +121,8 @@ while True:
         nval=register_dict[binary_instruction[6:9]][1]
         nval=int("0b"+nval,2)
         nval= nval << val
-        if(nval>=0 and nval<=127):
-            register_dict[binary_instruction[6:9]][1]="0"*(7-len(bin(nval)[2:]))+bin(nval)[2:]
+        if(nval>=0 and nval<=65535):
+            register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(nval)[2:]))+bin(nval)[2:]
 
   
 
