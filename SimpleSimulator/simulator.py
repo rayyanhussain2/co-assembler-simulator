@@ -19,11 +19,13 @@ halt= False
 #taking inputs
 with open("test.txt","r") as f:
     input_binary_codes = f.readlines()
+    #input_binary_codes = sys.stdin.readlines()
     input_binary_codes = [i.strip() for i in input_binary_codes]
 
 #Parsing each line of instruction
 var_count = 0; label_count = 0;
 i = 0
+
 while True:
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
@@ -105,7 +107,7 @@ while True:
         if(val > 65535):
             register_dict["111"][1][-4]="1"
         else:
-            register_dict[binary_instruction[6:9]][1]=val
+            register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(val)[2:]))+bin(val)[2:]
 
 
     #rs
@@ -215,7 +217,9 @@ while True:
         var_dict[binary_instruction[9:]] = register_dict[binary_instruction[6:9]][1]
 
     #load
-    if(op_code=="00100"):
+    elif(op_code=="00100"):
+        if(binary_instruction[9:] not in var_dict.keys()):
+            var_dict[binary_instruction[9:]] = "0" * (16)
         register_dict[binary_instruction[6:9]][1]= var_dict[binary_instruction[9:]]      
 
     #incrementing the counter 
@@ -227,9 +231,9 @@ while True:
     line = pc
     for k in list(register_dict.values()):
         line += " "*8
-        line += k[1]
+        line += str(k[1])
 
-    output.append(line)
+    print(line)
 
 
 #Dumping memory
@@ -238,12 +242,13 @@ for i in input_binary_codes:
     b = str(bin(k)[2:])
     b = "0"*(7 - len(b)) + b
     l = f"{b} {i}"
-    output.append(l)
+    print(l)
     k+=1
 
 for i in list(var_dict.keys()):
     b = str(bin(k)[2:])
     b = "0"*(7 - len(b)) + b
-    l = f"{b} {i} {var_dict[i]}"
-    output.append(l)
+    l = f"{b} {var_dict[i]}"
+    print(l)
     k+=1
+
