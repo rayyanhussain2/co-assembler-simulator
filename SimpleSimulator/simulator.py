@@ -11,8 +11,8 @@ op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], 
 register_dict={'000':['R0',"0000000000000000"],'001':['R1',"0000000000000000"],'010':['R2',"0000000000000000"],'011':['R3',"0000000000000000"],'100':['R4',"0000000000000000"],'101':['R5',"0000000000000000"],'110':['R6',"0000000000000000"],'111':['FLAGS', "0000000000000000"]}
 output = []
 
-#addres dict
-add_dict={}
+#dict
+add_dict={};  var_dict = {} ; label_dict = {}
 
 #the program counter
 halt= False
@@ -22,13 +22,14 @@ with open("test.txt","r") as f:
     input_binary_codes = [i.strip() for i in input_binary_codes]
 
 #Parsing each line of instruction
-var_count = 0; label_count = 0; var_dict = {} ; label_dict = {}
+var_count = 0; label_count = 0;
 i = 0
 while True:
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
 
-    #Type A
+    #Type A (3 reg)
+    #add
     if(op_code=="00000"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
         val2="0b"+register_dict[binary_instruction[13:16]][1]
@@ -40,6 +41,7 @@ while True:
         elif (val > 127):
             register_dict["111"][1][-4]="1"
 
+    #sub
     elif(op_code=="00001"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
         val2="0b"+register_dict[binary_instruction[13:16]][1]
@@ -51,6 +53,7 @@ while True:
         elif (val > 127):
             register_dict["111"][1][-4]="1"
 
+    #Mul
     elif(op_code=="00110"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
         val2="0b"+register_dict[binary_instruction[13:16]][1]
@@ -61,6 +64,7 @@ while True:
         elif (val > 127):
             register_dict["111"][1][-4]="1"
 
+    #xor
     elif(op_code=="01010"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
         val2="0b"+register_dict[binary_instruction[13:16]][1]
@@ -69,6 +73,7 @@ while True:
         if(val>=0 and val<=127):
             register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
 
+    #or
     elif(op_code=="01011"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
         val2="0b"+register_dict[binary_instruction[13:16]][1]
@@ -77,6 +82,7 @@ while True:
         if(val>=0 and val<=127):
            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
 
+    #and
     elif(op_code=="01100"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
         val2="0b"+register_dict[binary_instruction[13:16]][1]
@@ -85,11 +91,13 @@ while True:
         if(val>=0 and val<=127):
            register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(val)[2:]))+bin(val)[2:]
 
-    #Type B
+    #Type B (reg - $IMM)
+    #mov
     elif(op_code=="00010"):
         val=binary_instruction[9:]
         register_dict[binary_instruction[6:9]][1]=val
 
+    #rs
     elif(op_code=="01000"):
         val="0b"+binary_instruction[9:]
         val=int(val,2)
@@ -99,6 +107,7 @@ while True:
         if(nval>=0 and nval<=127):
             register_dict[binary_instruction[6:9]][1]="0"*(7-len(bin(nval)[2:]))+bin(nval)[2:]
 
+    #ls
     elif(op_code=="01001"):
         val="0b"+binary_instruction[9:]
         val=int(val,2)
@@ -108,17 +117,12 @@ while True:
         if(nval>=0 and nval<=127):
             register_dict[binary_instruction[6:9]][1]="0"*(7-len(bin(nval)[2:]))+bin(nval)[2:]
 
-    #Type D
-    elif (op_code == "00100" or op_code == "00101"):
-        mem_address = binary_instruction[-8:-1] 
-        if mem_address not in var_dict.values():
-            var_count += 1
-            var = "var" + str(var_count)
-            var_dict[var] = mem_address
+  
 
     #Type F
     elif(op_code == "11010"):
         break
+        halt = True
 
     #Type E 
     elif(op_code == "01111"):
@@ -141,19 +145,19 @@ while True:
             continue
 
     #type C
-
+    #mov R1 R2
     elif(op_code == "00011"):
-        regval2="0b" + register_dict[binary_instruction[10:13]][1]
-        regval2=int(regval2,2)
-        register_dict[binary_instruction[7:10]][1]= "0"*(7-len(bin(regval2)[2:]))+bin(regval2)[2:]
+        register_dict[binary_instruction[10:13]][1] = register_dict[binary_instruction[13:16]][1]
 
-
+    #Invert
     elif(op_code == "01101"):
-        regval2="0b" + register_dict[binary_instruction[10:13]][1]
-        regval2=int(regval2,2)
-        regval1= ~regval2
-        register_dict[binary_instruction[6:9]][1]=regval1
+        regval2 = "0b" + register_dict[binary_instruction[13:16]][1]
+        regval2 = ~int(regval2, 2)
+        regval2 = bin(regval2)
+        regval2 = "0"* (16 - len(regval2[2:])) + regval2[2:]
+        register_dict[binary_instruction[10:13]][1] = regval2
 
+    #compare
     elif(op_code == "01110"):
         val1="0b"+register_dict[binary_instruction[10:13]][1]
         val2="0b"+register_dict[binary_instruction[13:16]][1]
@@ -167,14 +171,17 @@ while True:
         elif val1==val2:
             register_dict["111"][1][-1]="1"
 
-    elif(op_code=="00110"):
+    #div
+    elif(op_code=="00111"):
         val1="0b" + register_dict[binary_instruction[10:13]][1]
         val2="0b" + register_dict[binary_instruction[13:16]][1]
         val1,val2=int(val1,2),int(val2,2)
-        if val2==0:
-            register_dict['111'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
-            register_dict['000'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
-            register_dict['001'][1]="0"*(7-len(bin(val2)[2:]))+bin(val2)[2:]
+
+        #Denominator is zero. Infinite
+        if val2 == 0:
+            register_dict["111"][1][-4]="1"
+            register_dict['000'][1]="0"*(16)
+            register_dict['001'][1]="0"*(16)
             
         else:
             valQ=val1//val2
@@ -183,26 +190,18 @@ while True:
             if (valQ > 127):
                 register_dict["111"][1][-4]="1"
             else:
-                register_dict['000'][1]="0"*(7-len(bin(valQ)[2:]))+bin(valQ)[2:]
-                register_dict['001'][1]="0"*(7-len(bin(valR)[2:]))+bin(valR)[2:]
+                register_dict['000'][1]="0"*(16-len(bin(valQ)[2:]))+bin(valQ)[2:]
+                register_dict['001'][1]="0"*(16-len(bin(valR)[2:]))+bin(valR)[2:]
 
 
-    #type 
-    #load
-    elif(op_code=="00100"):
-        mem=binary_instruction[9:]
-        value="0b" + add_dict[val][0]
-
-        register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(value)[2:]))+bin(value)[2:]
-        
-        
+    #Type D(reg - mem)
     #store
     elif(op_code=="00101"):
-        reg=binary_instruction[9:]
-        mem=register_dict[binary_instruction[6:9]][1]
-        mem=int("0b"+mem,2)
-        add_dict[val][0]=mem
+        var_dict[binary_instruction[9:]] = register_dict[binary_instruction[6:9]][1]
 
+    #load
+    if(op_code=="00100"):
+        register_dict[binary_instruction[6:9]][1]= var_dict[binary_instruction[9:]]      
 
     #incrementing the counter 
     i += 1
