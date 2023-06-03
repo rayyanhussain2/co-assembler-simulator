@@ -222,8 +222,6 @@ while True:
             var_dict[binary_instruction[9:]] = "0" * (16)
         register_dict[binary_instruction[6:9]][1]= var_dict[binary_instruction[9:]]      
 
-    #incrementing the counter 
-    i += 1
 
     #Getting the status
     pc = str(bin(i)[2:])
@@ -234,6 +232,9 @@ while True:
         line += str(k[1])
 
     print(line)
+
+    #Incrementing pc
+    i+=1
 
 
 #Dumping memory
