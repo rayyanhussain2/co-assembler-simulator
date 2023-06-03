@@ -228,7 +228,7 @@ while True:
     pc = "0"*(7 - len(pc)) + pc
     line = pc
     for k in list(register_dict.values()):
-        line += " "*8
+        line += " "
         line += str(k[1])
 
     print(line)
