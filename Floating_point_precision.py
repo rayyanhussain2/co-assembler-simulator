@@ -38,7 +38,8 @@ def floating_point_precision_val(binary_no):
     return ans
 
 
-def floating_point_precision_bin(val):
+def floating_point_precision_bin(number):
+    val = float_binary(number)
     k = val.split(".")
     shift = len(k[0])-1
     mantissa = k[0][1:] + k[1]
@@ -46,4 +47,3 @@ def floating_point_precision_bin(val):
     exponentb = str(bin(exponent))[2:]
     exponentb = (3 - len(exponentb))*"0" + exponentb
     return exponentb + mantissa
-
