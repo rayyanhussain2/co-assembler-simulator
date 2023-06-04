@@ -1,4 +1,5 @@
 import sys
+import Floating_point_precision as fp
 
 #variables dictionary with opcodes
 op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], '00011': ['mov_reg', 'C'],
@@ -222,6 +223,38 @@ while True:
             var_dict[binary_instruction[9:]] = "0" * (16)
         register_dict[binary_instruction[6:9]][1]= var_dict[binary_instruction[9:]]      
 
+
+
+    #add float
+    elif(op_code=="10000"):
+        val1=fp.floating_point_precision_val(register_dict[binary_instruction[10:13]][1])
+        val2=fp.floating_point_precision_val(register_dict[binary_instruction[13:16]][1])
+        val = val1+val2
+        val_b = fp.floating_point_precision_bin(val)
+        if 0<=val_b<=31.5:
+            register_dict[binary_instruction[7:10]][1]= "0"*(16 - len(val_b))+ val_b
+        elif val_b > 31.5:
+            register_dict["111"][1][-4]="1"
+
+    #sub float
+    elif(op_code=="10001"):
+        val1=fp.floating_point_precision_val(register_dict[binary_instruction[10:13]][1])
+        val2=fp.floating_point_precision_val(register_dict[binary_instruction[13:16]][1])
+        val = val1-val2
+        val_b = fp.floating_point_precision_bin(val)
+        if 0<=val_b<=31.5:
+            register_dict[binary_instruction[7:10]][1]= "0"*(16 - len(val_b))+ val_b
+        elif val_b > 31.5:
+            register_dict["111"][1][-4]="1"
+
+
+    #move float
+    elif(op_code=="10010"):
+        val=binary_instruction[9:]
+        if 0<=val<=31.5:
+            register_dict[binary_instruction[6:9]][1]="0"*(16-len(val))+val
+        elif val > 31.5:
+            register_dict["111"][1][-4]="1"
 
     #Getting the status
     pc = str(bin(i)[2:])
