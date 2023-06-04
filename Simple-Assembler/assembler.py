@@ -1,11 +1,14 @@
 import sys
+import floating
 
 #constant variables
-op_dict = {'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov': ['00010', 'B'], 'mov_reg': ['00011', 'C'],
-          'ld': ['00100', 'D'], 'st': ['00101', 'D'], 'mul': ['00110', 'A'], 'div': ['00111', 'C'],
-          'rs': ['01000', 'B'], 'ls': ['01001', 'B'], 'xor': ['01010', 'A'], 'or': ['01011', 'A'],
-          'and': ['01100', 'A'], 'not': ['01101', 'C'], 'cmp': ['01110', 'C'], 'jmp': ['01111', 'E'],
-          'jlt': ['11100', 'E'], 'jgt': ['11101', 'E'], 'je': ['11111', 'E'], 'hlt': ['11010', 'F'], 'var': ['', '']}
+op_dict = { 'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov': ['00010', 'B'], 'mov_reg': ['00011', 'C'],
+            'ld': ['00100', 'D'], 'st': ['00101', 'D'], 'mul': ['00110', 'A'], 'div': ['00111', 'C'],
+            'rs': ['01000', 'B'], 'ls': ['01001', 'B'], 'xor': ['01010', 'A'], 'or': ['01011', 'A'],
+            'and': ['01100', 'A'], 'not': ['01101', 'C'], 'cmp': ['01110', 'C'], 'jmp': ['01111', 'E'],
+            'jlt': ['11100', 'E'], 'jgt': ['11101', 'E'], 'je': ['11111', 'E'], 'hlt': ['11010', 'F'],
+            'var': ['', ''], 'addf': ['10000', 'A'], 'subf': ['10001', 'A'],
+                'movf': ['10010', 'BF']}
 
 register_dict={'R0':'000','R1':'001','R2':'010','R3':'011','R4':'100','R5':'101','R6':'110','FLAGS':'111'}
 
@@ -61,15 +64,6 @@ used_variables = list()
 hlt_counter = 0
 
 #------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
 
 #Handling instruction length errors
 if(len(input_assembly_codes) > 128):
@@ -143,6 +137,32 @@ else:
                         immidiate_value = str(bin(int(curr_line[2][1:])))
                         immidiate_value = "0" * (7-len(immidiate_value[2:])) + immidiate_value[2:]
                         machine_code_list.append(op_dict[curr_line[0]][0] + unused_bits + register_dict[curr_line[1]] + immidiate_value)
+                    else:
+                        pass
+                else:
+                    error_indices.append([str(i+1), curr_line[1], 'a_reg'])
+
+            #If opcode is of type BF
+            elif op_dict[curr_line[0]][1] == 'BF':
+                imm_flag=True
+                
+                #if the immediate val does not have an $ sign
+                if(curr_line[2][0] != '$'):
+                    error_indices.append([str(i+1), "Undefined Register or immediate value " + "\"" + curr_line[2] + "\"", 'e'])
+                    imm_flag = False
+                
+                #has a dollar sign but illegal range 
+                else:
+                    if not((isinstance(eval(curr_line[2][1:]), int) == True or isinstance(eval(curr_line[2][1:]), float) == True) and (float(curr_line[2][1:]) >= 0.125) and (int(curr_line[2][1:]) <= (31.5))):
+                        error_indices.append([str(i+1), "Illegal immediate value " + curr_line[2][1:], 'e'])
+                        imm_flag=False
+
+                
+                #If the registers are valid and the immediate value is correct
+                if(curr_line[1] in register_dict.keys()):
+                    if imm_flag==True:
+                        imm_binary = floating_point_precision_bin(float(curr_line[2][1:]))
+                        machine_code_list.append(op_dict[curr_line[0]][0] + register_dict[curr_line[1]] + imm_binary)
                     else:
                         pass
                 else:
