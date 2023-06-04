@@ -17,8 +17,9 @@ add_dict={};  var_dict = {} ; label_dict = {}
 
 #the program counter
 halt= False
+
 #taking inputs
-with open("test.txt","r") as f:
+with open("test5.txt","r") as f:
     input_binary_codes = f.readlines()
     #input_binary_codes = sys.stdin.readlines()
     input_binary_codes = [i.strip() for i in input_binary_codes]
@@ -26,8 +27,11 @@ with open("test.txt","r") as f:
 #Parsing each line of instruction
 var_count = 0; label_count = 0;
 i = 0
+print(input_binary_codes)
 
 while True:
+    pc = i
+    flags=False
     binary_instruction = input_binary_codes[i]
     op_code = binary_instruction[0:5]
 
@@ -42,7 +46,8 @@ while True:
             register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
 
         elif (val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
     #sub
     elif(op_code=="00001"):
@@ -54,7 +59,8 @@ while True:
             register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
 
         elif (val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
     #Mul
     elif(op_code=="00110"):
@@ -65,7 +71,9 @@ while True:
         if(val>=0 and val<=65535):
             register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
         elif (val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
+
 
     #xor
     elif(op_code=="01010"):
@@ -76,7 +84,9 @@ while True:
         if(val>=0 and val<=65535):
             register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
         elif(val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
+
 
     #or
     elif(op_code=="01011"):
@@ -87,7 +97,8 @@ while True:
         if(val>=0 and val<=65535):
            register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
         elif(val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
 
     #and
@@ -99,14 +110,16 @@ while True:
         if(val>=0 and val<=65535):
            register_dict[binary_instruction[7:10]][1]= "0"*(16-len(bin(val)[2:]))+bin(val)[2:]
         elif(val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
     #Type B (reg - $IMM)
     #mov
     elif(op_code=="00010"):
         val=int(("0b"+binary_instruction[9:]),2)
         if(val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
         else:
             register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(val)[2:]))+bin(val)[2:]
 
@@ -121,7 +134,8 @@ while True:
         if(nval>=0 and nval<=65535):
             register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(nval)[2:]))+bin(nval)[2:]
         elif(val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
     #ls
     elif(op_code=="01001"):
@@ -133,34 +147,34 @@ while True:
         if(nval>=0 and nval<=65535):
             register_dict[binary_instruction[6:9]][1]="0"*(16-len(bin(nval)[2:]))+bin(nval)[2:]
         elif(val > 65535):
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
   
 
     #Type F
     elif(op_code == "11010"):
-        break
         halt = True
 
     #Type E 
     elif(op_code == "01111"):
-        i = int(binary_instruction[5:]) - 1
-        continue
+        i = int("0b"+binary_instruction[5:],2) - 1
+        
 
     elif(op_code == "11100"):
         if(register_dict["111"][1][-3] == '1'):
-            i = int(binary_instruction[5:]) - 1
-            continue
+            i = int("0b"+binary_instruction[5:],2) - 1
+            
 
     elif(op_code == "11101"):
         if(register_dict["111"][1][-2] == '1'):
-            i = int(binary_instruction[5:]) - 1
-            continue
+            i = int("0b"+binary_instruction[5:],2) - 1
+            
         
     elif(op_code == "11111"):
         if(register_dict["111"][1][-1] == '1'):
-            i = int(binary_instruction[5:]) - 1
-            continue
+            i = int("0b"+binary_instruction[5:],2) - 1
+            
 
     #type C
     #mov R1 R2
@@ -183,11 +197,14 @@ while True:
         val2=int(val2,2)
 
         if val1>val2:
-            register_dict["111"][1][-2]="1"
+            register_dict["111"][1] = 12*"0" + "0010"
+            flags=True
         elif val1<val2:
-            register_dict["111"][1][-3] == '1'
+            register_dict["111"][1] = 12*"0" + "0100"
+            flags=True
         elif val1==val2:
-            register_dict["111"][1][-1]="1"
+            register_dict["111"][1] = 12*"0" + "0001"
+            flags=True
 
     #div
     elif(op_code=="00111"):
@@ -205,8 +222,9 @@ while True:
             valQ=val1//val2
             valR=val1%val2
 
-            if (valQ > 127):
-                register_dict["111"][1][-4]="1"
+            if (valQ > 65535):
+                register_dict["111"][1] = 12*"0" + "1000"
+                flags=True
             else:
                 register_dict['000'][1]="0"*(16-len(bin(valQ)[2:]))+bin(valQ)[2:]
                 register_dict['001'][1]="0"*(16-len(bin(valR)[2:]))+bin(valR)[2:]
@@ -234,7 +252,8 @@ while True:
         if 0<=val_b<=31.5:
             register_dict[binary_instruction[7:10]][1]= "0"*(16 - len(val_b))+ val_b
         elif val_b > 31.5:
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
     #sub float
     elif(op_code=="10001"):
@@ -245,8 +264,8 @@ while True:
         if 0<=val_b<=31.5:
             register_dict[binary_instruction[7:10]][1]= "0"*(16 - len(val_b))+ val_b
         elif val_b > 31.5:
-            register_dict["111"][1][-4]="1"
-
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
     #move float
     elif(op_code=="10010"):
@@ -254,17 +273,30 @@ while True:
         if 0<=val<=31.5:
             register_dict[binary_instruction[6:9]][1]="0"*(16-len(val))+val
         elif val > 31.5:
-            register_dict["111"][1][-4]="1"
+            register_dict["111"][1] = 12*"0" + "1000"
+            flags=True
 
     #Getting the status
-    pc = str(bin(i)[2:])
-    pc = "0"*(7 - len(pc)) + pc
-    line = pc
-    for k in list(register_dict.values()):
-        line += " "
-        line += str(k[1])
+    pc_b = str(bin(pc))[2:]
+    
+    pc_b = "0"*(7 - len(pc_b)) + pc_b
 
-    print(line)
+
+    if flags==True:
+        pass
+    else:
+        register_dict["111"][1]=16*"0"
+
+    line = pc_b
+    line += "        "
+    for k in list(register_dict.values()):
+        
+        line += str(k[1])
+        line += " "
+
+    print(line[:len(line)-1])
+    if halt == True:
+        break
 
     #Incrementing pc
     i+=1
