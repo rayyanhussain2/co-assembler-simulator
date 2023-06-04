@@ -46,4 +46,5 @@ def floating_point_precision_bin(number):
     exponent = shift + 3
     exponentb = str(bin(exponent))[2:]
     exponentb = (3 - len(exponentb))*"0" + exponentb
-    return exponentb + mantissa
+    return exponentb + mantissa[0:5]
+
