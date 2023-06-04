@@ -1,5 +1,5 @@
 import sys
-import floating
+import Floating_point_precision as fp
 
 #constant variables
 op_dict = { 'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov': ['00010', 'B'], 'mov_reg': ['00011', 'C'],
@@ -161,7 +161,7 @@ else:
                 #If the registers are valid and the immediate value is correct
                 if(curr_line[1] in register_dict.keys()):
                     if imm_flag==True:
-                        imm_binary = floating_point_precision_bin(float(curr_line[2][1:]))
+                        imm_binary = fp.floating_point_precision_bin(float(curr_line[2][1:]))
                         machine_code_list.append(op_dict[curr_line[0]][0] + register_dict[curr_line[1]] + imm_binary)
                     else:
                         pass
