@@ -1,5 +1,5 @@
 import sys
-import SimpleSimulator.Floating_point_precision as fp
+import Floating_point_precision as fp
 
 #variables dictionary with opcodes
 op_dict = {'00000': ['add', 'A'], '00001': ['sub', 'A'], '00010': ['mov', 'B'], '00011': ['mov_reg', 'C'],
@@ -19,11 +19,11 @@ add_dict={};  var_dict = {} ; label_dict = {}
 halt= False
 
 #taking inputs
-'''with open("test5.txt","r") as f:
+'''
+with open("test.txt","r") as f:
     input_binary_codes = f.readlines()
     #input_binary_codes = sys.stdin.readlines()
-    input_binary_codes = [i.strip() for i in input_binary_codes]
-    '''
+    input_binary_codes = [i.strip() for i in input_binary_codes]'''
 input_binary_codes = sys.stdin.readlines()
 input_binary_codes = [i.strip() for i in input_binary_codes]
 
@@ -31,7 +31,6 @@ input_binary_codes = [i.strip() for i in input_binary_codes]
 var_count = 0
 label_count = 0
 i = 0
-print(input_binary_codes)
 
 while True:
     pc = i

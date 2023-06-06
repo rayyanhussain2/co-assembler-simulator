@@ -1,5 +1,5 @@
 import sys
-import SimpleSimulator.Floating_point_precision as fp
+import Floating_point_precision as fp
 
 #constant variables
 op_dict = { 'add': ['00000', 'A'], 'sub': ['00001', 'A'], 'mov': ['00010', 'B'], 'mov_reg': ['00011', 'C'],
