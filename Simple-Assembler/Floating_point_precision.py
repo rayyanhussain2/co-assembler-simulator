@@ -39,12 +39,23 @@ def floating_point_precision_val(binary_no):
 
 
 def floating_point_precision_bin(number):
+    
     val = float_binary(number)
     k = val.split(".")
     shift = len(k[0])-1
-    mantissa = k[0][1:] + k[1]
-    exponent = shift + 3
-    exponentb = str(bin(exponent))[2:]
-    exponentb = (3 - len(exponentb))*"0" + exponentb
-    return exponentb + mantissa[0:5]
-
+    if shift ==  0 and int(k[0]) == 0:
+        shift = -(k[1].find("1"))-1
+        k[1] += "0"*8
+        mantissa = k[1][-shift:]
+        exponent = shift + 3
+        exponentb = str(bin(exponent))[2:]
+        exponentb = (3 - len(exponentb))*"0" + exponentb
+        return exponentb + mantissa[0:5]
+    
+    
+    else:
+        mantissa = k[0][1:] + k[1]
+        exponent = shift + 3
+        exponentb = str(bin(exponent))[2:]
+        exponentb = (3 - len(exponentb))*"0" + exponentb
+        return exponentb + mantissa[0:5]
